@@ -49,10 +49,6 @@
         "arrow-body-style": [
             "error",
             "always"
-        ],
-        "array-bracket-newline": [
-            "error",
-            "always"
         ]
     }
 }
