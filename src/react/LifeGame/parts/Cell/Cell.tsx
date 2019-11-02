@@ -13,6 +13,9 @@ const styles = createStyles({
             backgroundColor: colors.grey[900]
         },
         backgroundColor: colors.grey[50],
+        border: "1px solid",
+        borderColor: colors.grey[900],
+        borderRadius: 0,
         boxSizing: "border-box",
         display: "inline-block",
         height: 10,
