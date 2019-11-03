@@ -1,6 +1,6 @@
 import { Slider, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import React from "react";
+import React, { useState } from "react";
 import { isArray } from "util";
 import { DISPATCHABLE, IDispatchable } from "../../../core/Interfaces/Dispatchable";
 
@@ -18,14 +18,17 @@ type INumberBoxState = IDispatchable<string>
 
 interface INumberBoxProps {
     state: INumberBoxState;
+    min?: number;
+    max?: number;
 }
 
 const NumberBox: React.FC<INumberBoxProps> = (props: INumberBoxProps) => {
+    const [sliderValue, setSlideValue] = useState(parseInt(props.state[DISPATCHABLE.VALUE]));
     const classes = createStyles();
 
     const handleChangeTextFieldFactory = (dispatcher: INumberBoxState["1"]): React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> => {
         return (e) => {
-            if (!isNaN(Number(e.target.value))) {
+            if (!isNaN(Number(e.target.value)) && Number(e.target.value) >= (props.min || 0) && Number(e.target.value) <= (props.max || 100)) {
                 // 先頭の０の繰り返しは外す
                 dispatcher(e.target.value.replace(/^0+/, "0"));
             }
@@ -47,13 +50,14 @@ const NumberBox: React.FC<INumberBoxProps> = (props: INumberBoxProps) => {
             onChange={handleChangeTextFieldFactory(props.state[DISPATCHABLE.DISPATCHER])}
         />
         <Slider
-            value={parseInt(props.state[DISPATCHABLE.VALUE])}
+            value={sliderValue}
             step={1}
             marks
-            min={0}
-            max={100}
+            min={props.min || 0}
+            max={props.max || 100}
             valueLabelDisplay="auto"
-            onChange={handleChangeSliderFactory(props.state[DISPATCHABLE.DISPATCHER])}
+            onChange={(e, value) => { !isArray(value) && setSlideValue(value); }}
+            onChangeCommitted={handleChangeSliderFactory(props.state[DISPATCHABLE.DISPATCHER])}
         />
     </div>;
 };
