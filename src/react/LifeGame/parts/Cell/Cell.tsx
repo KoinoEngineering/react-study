@@ -1,14 +1,13 @@
-import { Button, colors, WithStyles, createStyles, withStyles } from "@material-ui/core";
+import { Button, colors } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 import classNames from "classnames";
 import React from "react";
-import { IDispatchable, DISPATCHABLE } from "../../../../core/Interfaces/Dispatchable";
+import { DISPATCHABLE } from "../../../../core/Interfaces/Dispatchable";
+import { IFieldState } from "../Field/Field";
 
 
-interface IStyleProps {
-    alive: boolean;
-}
 
-const styles = createStyles({
+const useStyles = makeStyles({
     root: {
         "&.alive": {
             backgroundColor: colors.grey[900]
@@ -26,34 +25,34 @@ const styles = createStyles({
     },
 });
 
-export interface ICellProps extends WithStyles<typeof styles> {
-    alive: IDispatchable<boolean>;
+export interface ICellProps {
+    y: number;
+    x: number;
+    fieldState: IFieldState;
 }
 
-class Cell extends React.PureComponent<ICellProps> {
-    constructor(props: ICellProps) {
-        super(props);
-        //初期化
-        this.state = { alive: false };
-    }
-
-    private HandleClickButton(alive: IDispatchable<boolean>) {
+const Cell: React.FC<ICellProps> = (props: ICellProps) => {
+    const classes = useStyles();
+    const HandleClickButtonFactory = (fieldState: IFieldState, y: number, x: number) => {
+        const field = fieldState[DISPATCHABLE.VALUE];
+        const fieldDispatcher = fieldState[DISPATCHABLE.DISPATCHER];
         return () => {
-            alive[DISPATCHABLE.DISPATCHER](!alive[DISPATCHABLE.VALUE]);
+            fieldDispatcher(field.map((row, idxY) => {
+                return idxY === y
+                    ? row.map((value, idxX) => {
+                        return idxX === x
+                            ? !field[y][x]
+                            : value;
+                    })
+                    : row;
+            }));
         };
-    }
+    };
 
+    return <Button
+        className={classNames(classes.root, { alive: props.fieldState[DISPATCHABLE.VALUE][props.y][props.x] })}
+        onClick={HandleClickButtonFactory(props.fieldState, props.y, props.x)}
+    />;
+};
 
-    render() {
-        const {
-            classes,
-            alive
-        } = this.props;
-        return <Button
-            className={classNames(classes.root, { alive: alive[DISPATCHABLE.VALUE] })}
-            onClick={this.HandleClickButton(alive)}
-        />;
-    }
-}
-
-export default withStyles(styles)(Cell);
+export default Cell;
