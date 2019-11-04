@@ -1,20 +1,24 @@
-import { createStyles, withStyles, WithStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 import React from "react";
+import { DISPATCHABLE } from "../../../../core/Interfaces/Dispatchable";
 import Cell from "../Cell/Cell";
 import { IFieldState } from "../Field/Field";
-import { DISPATCHABLE } from "../../../../core/Interfaces/Dispatchable";
 
-const styles = createStyles({});
+const useStyles = makeStyles({
+    root: {
+        height: 10,
+    }
+});
 
-interface IRowProps extends WithStyles<typeof styles> {
+interface IRowProps {
     y: number;
     fieldState: IFieldState;
 }
 
 
 const Row: React.FC<IRowProps> = (props: IRowProps) => {
-
-    return <div>
+    const classes = useStyles();
+    return <div className={classes.root}>
         {Array(props.fieldState[DISPATCHABLE.VALUE][props.y].length).fill(0).map((value, idx) => {
             return <Cell key={"Cell:" + props.y + "-" + idx} y={props.y} x={idx} fieldState={props.fieldState} />;
         })}
@@ -23,4 +27,4 @@ const Row: React.FC<IRowProps> = (props: IRowProps) => {
 };
 
 
-export default withStyles(styles)(Row);
+export default Row;
