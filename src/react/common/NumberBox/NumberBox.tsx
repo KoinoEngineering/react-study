@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import React, { useState } from "react";
 import { isArray } from "util";
 import { DISPATCHABLE, IDispatchable } from "../../../core/Interfaces/Dispatchable";
+import { TextFieldProps } from "@material-ui/core/TextField";
 
 const createStyles = makeStyles({
     root: {
@@ -20,6 +21,7 @@ interface INumberBoxProps {
     state: INumberBoxState;
     min?: number;
     max?: number;
+    label?: TextFieldProps["label"];
 }
 
 const NumberBox: React.FC<INumberBoxProps> = (props: INumberBoxProps) => {
@@ -44,6 +46,7 @@ const NumberBox: React.FC<INumberBoxProps> = (props: INumberBoxProps) => {
             value={props.state[DISPATCHABLE.VALUE]}
             margin="normal"
             variant="outlined"
+            label={props.label}
             InputProps={{
                 classes: { root: classes.textFieldRoot }
             }}
