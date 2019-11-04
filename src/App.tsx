@@ -1,7 +1,8 @@
-import React from "react";
-import logo from "./logo.svg";
 import { makeStyles, MuiThemeProvider } from "@material-ui/core";
+import React from "react";
 import Theme from "./core/Theme";
+import logo from "./logo.svg";
+import LifeGame from "./react/LifeGame";
 
 const useStyles = makeStyles({
     App: {
@@ -33,6 +34,7 @@ const App: React.FC = () => {
     return (
         <MuiThemeProvider theme={Theme}>
             <div className={classes.App}>
+                <LifeGame />
                 <header className={classes.AppHeader}>
                     <img src={logo} className={classes.Applogo} alt="logo" />
                     <p>
