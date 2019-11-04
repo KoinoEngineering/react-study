@@ -5,8 +5,6 @@ import React from "react";
 import { DISPATCHABLE } from "../../../../core/Interfaces/Dispatchable";
 import { IFieldState } from "../Field/Field";
 
-
-
 const useStyles = makeStyles({
     root: {
         "&.alive": {
@@ -21,6 +19,7 @@ const useStyles = makeStyles({
         height: 10,
         minWidth: 10,
         padding: 0,
+        verticalAlign: "unset",
         width: 10,
     },
 });
@@ -50,9 +49,10 @@ const Cell: React.FC<ICellProps> = (props: ICellProps) => {
     };
 
     return <Button
+        ref={React.createRef<HTMLButtonElement>()}
         className={classNames(classes.root, { alive: props.fieldState[DISPATCHABLE.VALUE][props.y][props.x] })}
         onClick={HandleClickButtonFactory(props.fieldState, props.y, props.x)}
-    />;
+    >{""}</Button>;
 };
 
 export default Cell;
