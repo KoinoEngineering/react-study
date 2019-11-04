@@ -1,0 +1,54 @@
+{
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:react/recommended"
+    ],
+    "settings": {
+        "react": {
+            "version": "^16.9.0"
+        }
+    },
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "sort-keys": "error",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "semi": "error",
+        "quotes": [
+            2,
+            "double",
+            {
+                "avoidEscape": true,
+                "allowTemplateLiterals": true
+            }
+        ],
+        "arrow-parens": [
+            "error",
+            "always"
+        ],
+        "arrow-body-style": [
+            "error",
+            "always"
+        ]
+    }
+}
