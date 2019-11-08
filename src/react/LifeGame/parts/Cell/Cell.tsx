@@ -1,9 +1,7 @@
 import { Button, colors } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import classNames from "classnames";
-import React from "react";
-import { DISPATCHABLE } from "../../../../core/Interfaces/Dispatchable";
-import { IFieldState } from "../Field/Field";
+import React, { MouseEventHandler, useCallback, useMemo } from "react";
 
 const useStyles = makeStyles({
     root: {
@@ -24,35 +22,27 @@ const useStyles = makeStyles({
     },
 });
 
+export type CellMouseEventFactory = (y: number, x: number) => MouseEventHandler<HTMLInputElement>;
+
 export interface ICellProps {
     y: number;
     x: number;
-    fieldState: IFieldState;
+    alive: boolean;
+    onClick: CellMouseEventFactory;
 }
 
 const Cell: React.FC<ICellProps> = (props: ICellProps) => {
-    const classes = useStyles();
-    const HandleClickButtonFactory = (fieldState: IFieldState, y: number, x: number) => {
-        const field = fieldState[DISPATCHABLE.VALUE];
-        const fieldDispatcher = fieldState[DISPATCHABLE.DISPATCHER];
-        return () => {
-            fieldDispatcher(field.map((row, idxY) => {
-                return idxY === y
-                    ? row.map((value, idxX) => {
-                        return idxX === x
-                            ? !field[y][x]
-                            : value;
-                    })
-                    : row;
-            }));
-        };
-    };
-
-    return <Button
-        ref={React.createRef<HTMLButtonElement>()}
-        className={classNames(classes.root, { alive: props.fieldState[DISPATCHABLE.VALUE][props.y][props.x] })}
-        onClick={HandleClickButtonFactory(props.fieldState, props.y, props.x)}
-    >{""}</Button>;
+    const classes = useMemo(() => { return useStyles(); }, []);
+    const onClickHandler = useCallback(() => {
+        return props.onClick(props.y, props.x);
+    }, [props.y, props.x]);
+    return useMemo(() => {
+        return <Button
+            ref={React.createRef<HTMLButtonElement>()}
+            className={classNames(classes.root, { alive: props.alive })}
+            onClick={onClickHandler}
+        >{""}</Button>;
+    }, [props.y, props.x, props.alive]);
 };
 
 export default Cell;
