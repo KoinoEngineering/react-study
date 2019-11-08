@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useState } from "react";
 import { DISPATCHABLE } from "../../core/Interfaces/Dispatchable";
 import NumberBox from "../common/NumberBox/NumberBox";
+import { CellMouseEventFactory } from "./parts/Cell/Cell";
 import { Field } from "./parts/Field/Field";
 
 const createStyle = makeStyles({
@@ -25,6 +26,7 @@ const LifeGame: React.FC = () => {
                 return Array<boolean>(Number(width))
                     .fill(false);
             }));
+    const [fieldStateValue, fieldStateDispatcher] = fieldState;
 
     const handleStartClick = () => {
         if (!started) {
@@ -36,6 +38,16 @@ const LifeGame: React.FC = () => {
         if (started) {
             setStarted(false);
         }
+    };
+
+    const CellsOnClickFactory: CellMouseEventFactory = (y: number, x: number) => {
+        return () => {
+            fieldStateDispatcher(fieldStateValue.map((row, idxY) => {
+                return idxY !== y ? row : row.map((cell, idxX) => {
+                    return idxX !== x ? cell : !cell;
+                });
+            }));
+        };
     };
 
     const nextAlive = (cell: boolean, neighborAlive: number): boolean => {
@@ -56,8 +68,6 @@ const LifeGame: React.FC = () => {
     };
 
     // startedとfieldを監視して世代を進めるeffect
-    const fieldStateValue = fieldState[DISPATCHABLE.VALUE];
-    const fieldStateDispatcher = fieldState[DISPATCHABLE.DISPATCHER];
     useEffect(() => {
         if (started) {
             if (timeoutId) {
@@ -86,7 +96,7 @@ const LifeGame: React.FC = () => {
                 }));
             }, Number(delay) * 1000));
         }
-    }, [started, fieldStateValue, fieldStateDispatcher]);
+    }, [started, fieldStateValue, fieldStateDispatcher, delay, timeoutId]);
     // テキストボックスの値を監視して走るeffect
     const fieldDispather = fieldState[DISPATCHABLE.DISPATCHER];
     useEffect(() => {
@@ -111,7 +121,7 @@ const LifeGame: React.FC = () => {
             </div>
         </div>
         <div id="fieldArea">
-            <Field fieldState={fieldState} />
+            <Field fieldState={fieldState} CellsOnclick={CellsOnClickFactory} />
         </div>
     </div>;
 };

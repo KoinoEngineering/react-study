@@ -1,8 +1,6 @@
 import { makeStyles } from "@material-ui/styles";
-import React from "react";
-import { DISPATCHABLE } from "../../../../core/Interfaces/Dispatchable";
-import Cell from "../Cell/Cell";
-import { IFieldState } from "../Field/Field";
+import React, { useMemo } from "react";
+import Cell, { CellMouseEventFactory } from "../Cell/Cell";
 
 const useStyles = makeStyles({
     root: {
@@ -10,21 +8,36 @@ const useStyles = makeStyles({
     }
 });
 
+export type IRowState = boolean[];
+
 interface IRowProps {
     y: number;
-    fieldState: IFieldState;
+    row: IRowState;
+    CellsOnclick: CellMouseEventFactory;
 }
 
 
 const Row: React.FC<IRowProps> = (props: IRowProps) => {
-    const classes = useStyles();
-    return <div className={classes.root}>
-        {Array(props.fieldState[DISPATCHABLE.VALUE][props.y].length).fill(0).map((value, idx) => {
-            return <Cell key={"Cell:" + props.y + "-" + idx} y={props.y} x={idx} fieldState={props.fieldState} />;
-        })}
+    const {
+        root,
+    } = useStyles();
 
-    </div>;
+    const {
+        y,
+        row,
+        CellsOnclick } = props;
+    return useMemo(() => {
+        return <div className={root}>
+            {row.map((cell, idx) => {
+                return <Cell
+                    key={"Cell:" + y + "-" + idx}
+                    y={y}
+                    x={idx}
+                    alive={cell}
+                    onClickEventFactory={CellsOnclick} />;
+            })}
+        </div>;
+    }, [root, y, row, CellsOnclick]);
 };
-
 
 export default Row;

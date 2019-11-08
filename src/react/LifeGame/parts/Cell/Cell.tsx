@@ -22,27 +22,38 @@ const useStyles = makeStyles({
     },
 });
 
-export type CellMouseEventFactory = (y: number, x: number) => MouseEventHandler<HTMLInputElement>;
+export type CellMouseEventFactory = (y: number, x: number) => MouseEventHandler<HTMLButtonElement>;
 
 export interface ICellProps {
     y: number;
     x: number;
     alive: boolean;
-    onClick: CellMouseEventFactory;
+    onClickEventFactory: CellMouseEventFactory;
 }
 
 const Cell: React.FC<ICellProps> = (props: ICellProps) => {
-    const classes = useMemo(() => { return useStyles(); }, []);
+
+    const {
+        root
+    } = useStyles();
+
+    const {
+        onClickEventFactory: onClick,
+        y,
+        x,
+        alive,
+    } = props;
     const onClickHandler = useCallback(() => {
-        return props.onClick(props.y, props.x);
-    }, [props.y, props.x]);
+        console.log("call onClickHandler");
+        return onClick(y, x);
+    }, [onClick, y, x,]);
     return useMemo(() => {
         return <Button
             ref={React.createRef<HTMLButtonElement>()}
-            className={classNames(classes.root, { alive: props.alive })}
+            className={classNames(root, { alive })}
             onClick={onClickHandler}
         >{""}</Button>;
-    }, [props.y, props.x, props.alive]);
+    }, [alive, root, onClickHandler]);
 };
 
 export default Cell;
