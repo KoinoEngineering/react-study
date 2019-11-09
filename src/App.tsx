@@ -1,8 +1,9 @@
 import { makeStyles, MuiThemeProvider } from "@material-ui/core";
 import React from "react";
+import { BrowserRouter, Link, Route } from "react-router-dom";
 import Theme from "./core/Theme";
-import logo from "./logo.svg";
 import LifeGame from "./react/LifeGame";
+import { UseMemoTest } from "./react/UseMemoTest/UseMemoTest";
 
 const useStyles = makeStyles({
     App: {
@@ -34,21 +35,20 @@ const App: React.FC = () => {
     return (
         <MuiThemeProvider theme={Theme}>
             <div className={classes.App}>
-                <LifeGame />
-                <header className={classes.AppHeader}>
-                    <img src={logo} className={classes.Applogo} alt="logo" />
-                    <p>
-                        Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-                    <a
-                        className={classes.AppLink}
-                        href="https://reactjs.org"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Learn React
-        </a>
-                </header>
+                <BrowserRouter>
+                    <div>
+                        <ul>
+                            <li><Link to='/'>Home</Link></li>
+                            <li><Link to='/LifeGame'>LifeGame</Link></li>
+                            <li><Link to='/UseMemoTest'>UseMemoTest</Link></li>
+                        </ul>
+                        <hr />
+
+                        <Route exact path='/' />
+                        <Route path='/LifeGame' component={LifeGame} />
+                        <Route path='/UseMemoTest' component={UseMemoTest} />
+                    </div>
+                </BrowserRouter>
             </div>
         </MuiThemeProvider>
     );
