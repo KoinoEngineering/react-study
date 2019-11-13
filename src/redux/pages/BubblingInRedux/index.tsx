@@ -49,14 +49,20 @@ class BubblingInRedux extends React.Component<BubblingInReduxProps, never>{
         } = this.props;
         return <div className={ClassNames(classes.root, classes.flexBox)} >
             <div className={classes.eventLog}>
+                <div>
+                    イベントログ
+                </div>
                 <ul>
-                    {state.get("event").get("log").map((logitem, idx) => { return <li key={idx}>{logitem}</li>; })}
+                    {state
+                        .get("event")
+                        .get("log")
+                        .map((logitem, idx) => {
+                            return <li key={idx}>{logitem}</li>;
+                        })}
                 </ul>
             </div>
             <div className={classes.itemArea} >
-                <div className={classes.h1} >
-                    <Button variant="outlined" onClick={CreateClearEvent(dispatch)} >クリア</Button>
-                </div>
+                <div>テキストボックスにClickとBlurイベントが設定してあるときのイベント発火の確認用</div>
                 <div className={classes.h1} >
                     side by side
                     <TextBoxWithFocusBlur id="TextBox1" dispatch={dispatch} />
@@ -64,8 +70,11 @@ class BubblingInRedux extends React.Component<BubblingInReduxProps, never>{
                 </div>
                 <div className={classes.h1} >
                     state shareing
-                    <TextBoxWithFocusBlur id="TextBox3" dispatch={dispatch} activeElementId={state.get("activeElementId")} />
-                    <TextBoxWithFocusBlur id="TextBox4" dispatch={dispatch} activeElementId={state.get("activeElementId")} />
+                    <TextBoxWithFocusBlur id="TextBox3" dispatch={dispatch} activeElementId={state.get("activeElementId")} textField={{ value: "state.ActiveElementId is " + state.get("activeElementId") }} />
+                    <TextBoxWithFocusBlur id="TextBox4" dispatch={dispatch} activeElementId={state.get("activeElementId")} textField={{ value: "state.ActiveElementId is " + state.get("activeElementId") }} />
+                </div>
+                <div className={classes.h1} >
+                    <Button variant="outlined" onClick={CreateClearEvent(dispatch)} >クリア</Button>
                 </div>
             </div>
         </div>;
