@@ -33,7 +33,7 @@ class TextBoxWithFocusBlur extends React.Component<TextBoxWithFocusBlurProps, ne
         } = this.props;
 
         return <div className={classes.root}>
-            <TextField {...textField} variant="outlined" id={id} onClick={CreateFireEvent(dispatch, id)} onBlur={CreateFireEvent(dispatch, id)} label={id} />
+            <TextField fullWidth {...textField} variant="outlined" id={id} onClick={CreateFireEvent(dispatch, id)} onBlur={CreateFireEvent(dispatch, id)} label={id} />
         </div>;
     }
 }
