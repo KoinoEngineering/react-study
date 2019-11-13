@@ -4,6 +4,10 @@ import { BrowserRouter, Link, Route } from "react-router-dom";
 import Theme from "./core/Theme";
 import LifeGame from "./react/LifeGame";
 import { UseMemoTest } from "./react/UseMemoTest/UseMemoTest";
+import BubblingInRedux from "./redux/pages/BubblingInRedux";
+import { RecordOf } from "immutable";
+import { IState } from "./redux/state";
+import { Dispatchable } from "./redux/interfaces/Dispatchable";
 
 const useStyles = makeStyles({
     App: {
@@ -28,7 +32,11 @@ const useStyles = makeStyles({
 }
 );
 
-const App: React.FC = () => {
+export interface IAppProps extends Dispatchable {
+    state: RecordOf<IState>;
+}
+
+const App: React.FC<IAppProps> = (props: IAppProps) => {
 
     const classes = useStyles();
 
@@ -41,12 +49,14 @@ const App: React.FC = () => {
                             <li><Link to='/'>Home</Link></li>
                             <li><Link to='/LifeGame'>LifeGame</Link></li>
                             <li><Link to='/UseMemoTest'>UseMemoTest</Link></li>
+                            <li><Link to='/BubblingInRedux'>BubblingInRedux</Link></li>
                         </ul>
                         <hr />
 
                         <Route exact path='/' />
                         <Route path='/LifeGame' component={LifeGame} />
                         <Route path='/UseMemoTest' component={UseMemoTest} />
+                        <Route path='/BubblingInRedux' render={() => { return <BubblingInRedux state={props.state.get("bubblingInRedux")} dispatch={props.dispatch} />; }} />
                     </div>
                 </BrowserRouter>
             </div>
