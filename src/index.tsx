@@ -7,7 +7,7 @@ import { createStore, applyMiddleware } from "redux";
 import { reducer } from "./redux/reducer";
 import { logger } from "redux-logger";
 
-const store = createStore(reducer, applyMiddleware(logger));
+const store = process.env.NODE_ENV === "production" ? createStore(reducer) : createStore(reducer, applyMiddleware(logger));
 
 const render = () => {
     ReactDOM.render(<App state={store.getState()} dispatch={store.dispatch} />, document.getElementById("root"));
