@@ -3,8 +3,10 @@ import { IEventInfo, EventInfo } from "./EventInfo";
 
 export interface IBubblingInRedux {
     event: RecordOf<IEventInfo>;
+    activeElementId: Element["id"] | undefined | null;
 }
 
 export const BubblingInRedux = Record<IBubblingInRedux>({
-    event: new EventInfo()
+    activeElementId: undefined,
+    event: new EventInfo(),
 });
