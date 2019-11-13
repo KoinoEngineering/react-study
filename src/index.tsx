@@ -3,13 +3,14 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { reducer } from "./redux/reducer";
+import { logger } from "redux-logger";
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(logger));
 
 const render = () => {
-    ReactDOM.render(<App />, document.getElementById("root"));
+    ReactDOM.render(<App state={store.getState()} dispatch={store.dispatch} />, document.getElementById("root"));
 };
 
 store.subscribe(render);
