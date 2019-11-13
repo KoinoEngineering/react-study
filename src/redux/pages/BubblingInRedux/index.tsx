@@ -5,7 +5,7 @@ import { RecordOf } from "immutable";
 import React from "react";
 import { Dispatchable } from "../../interfaces/Dispatchable";
 import { IBubblingInRedux } from "../../state/BubblingInRedux";
-import { TextBoxWithFocusBlur } from "./TextBoxWithFocusBlur";
+import TextBoxWithFocusBlur from "./TextBoxWithFocusBlur";
 import { CreateClearEvent } from "../../action";
 
 const styles = createStyles({
@@ -61,6 +61,11 @@ class BubblingInRedux extends React.Component<BubblingInReduxProps, never>{
                     side by side
                     <TextBoxWithFocusBlur id="TextBox1" dispatch={dispatch} />
                     <TextBoxWithFocusBlur id="TextBox2" dispatch={dispatch} />
+                </div>
+                <div className={classes.h1} >
+                    state shareing
+                    <TextBoxWithFocusBlur id="TextBox3" dispatch={dispatch} activeElementId={state.get("activeElementId")} />
+                    <TextBoxWithFocusBlur id="TextBox4" dispatch={dispatch} activeElementId={state.get("activeElementId")} />
                 </div>
             </div>
         </div>;
