@@ -15,8 +15,10 @@ const createStyles = makeStyles({
     }
 });
 
+export type INumberBoxState = string;
+
 export interface INumberBoxProps {
-    state: string;
+    state: INumberBoxState;
     dispatch: React.Dispatch<React.SetStateAction<string>>;
     min?: number;
     max?: number;

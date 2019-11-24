@@ -13,16 +13,16 @@ const createStyle = makeStyles({
 
 const LifeGame: React.FC = () => {
     const classes = createStyle();
-    const width = useState("10");
-    const height = useState("10");
-    const delay = useState("1");
+    const [width, setWidth] = useState("10");
+    const [height, setHeight] = useState("10");
+    const [delay, setDelay] = useState("1");
     const [started, setStarted] = useState<boolean>(false);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>();
     const fieldState = useState<boolean[][]>(
-        Array<boolean[]>(Number(height[DISPATCHABLE.VALUE]))
+        Array<boolean[]>(Number(height))
             .fill([])
             .map(() => {
-                return Array<boolean>(Number(width[DISPATCHABLE.VALUE]))
+                return Array<boolean>(Number(width))
                     .fill(false);
             }));
 
@@ -84,28 +84,26 @@ const LifeGame: React.FC = () => {
                         return nextAlive(cell, neighborAliveCount);
                     });
                 }));
-            }, Number(delay[DISPATCHABLE.VALUE]) * 1000));
+            }, Number(delay) * 1000));
         }
     }, [started, fieldStateValue, fieldStateDispatcher]);
     // テキストボックスの値を監視して走るeffect
-    const heightValue = height[DISPATCHABLE.VALUE];
-    const widthValue = width[DISPATCHABLE.VALUE];
     const fieldDispather = fieldState[DISPATCHABLE.DISPATCHER];
     useEffect(() => {
         const fieldDispatcher = fieldDispather;
-        fieldDispatcher(Array<boolean[]>(Number(heightValue))
+        fieldDispatcher(Array<boolean[]>(Number(height))
             .fill([])
             .map(() => {
-                return Array<boolean>(Number(widthValue))
+                return Array<boolean>(Number(width))
                     .fill(false);
             }));
-    }, [heightValue, widthValue, fieldDispather]);
+    }, [height, width, fieldDispather]);
     return <div className={classes.root}>
         <div id="inputArea" >
             <div>
-                <NumberBox state={width} label="幅" />
-                <NumberBox state={height} label="高さ" />
-                <NumberBox state={delay} label="間隔(s)" min={0} max={10} />
+                <NumberBox state={width} dispatch={setWidth} label="幅" />
+                <NumberBox state={height} dispatch={setHeight} label="高さ" />
+                <NumberBox state={delay} dispatch={setDelay} label="間隔(s)" min={0} max={10} />
             </div>
             <div>
                 <Button onClick={handleStartClick}>start</Button>
