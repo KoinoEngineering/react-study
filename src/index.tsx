@@ -6,11 +6,16 @@ import * as serviceWorker from "./serviceWorker";
 import { createStore, applyMiddleware } from "redux";
 import { reducer } from "./redux/reducer";
 import { logger } from "redux-logger";
+import { Provider } from "react-redux";
 
 const store = process.env.NODE_ENV === "production" ? createStore(reducer) : createStore(reducer, applyMiddleware(logger));
 
 const render = () => {
-    ReactDOM.render(<App state={store.getState()} dispatch={store.dispatch} />, document.getElementById("root"));
+    ReactDOM.render(
+        <Provider store={store}>
+            <App state={store.getState()} dispatch={store.dispatch} />
+        </Provider>,
+        document.getElementById("root"));
 };
 
 store.subscribe(render);
