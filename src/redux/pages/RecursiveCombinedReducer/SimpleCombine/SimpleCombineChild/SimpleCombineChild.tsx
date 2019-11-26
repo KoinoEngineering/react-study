@@ -1,5 +1,5 @@
 import React from "react";
-import { SimpleCombineGrandChildProps, SimpleCombineGrandChildState, SimpleCombineGrandChild } from "./SimpleCombineGrandChild/SimpleCombineGrandChild";
+import SimpleCombineGrandChild, { SimpleCombineGrandChildProps, SimpleCombineGrandChildState, } from "./SimpleCombineGrandChild/SimpleCombineGrandChild";
 
 export interface SimpleCombineChildProps {
     grandChildA: SimpleCombineGrandChildProps;
