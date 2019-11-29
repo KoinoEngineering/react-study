@@ -43,7 +43,6 @@ class SimpleCombineGrandChild extends React.PureComponent<SimpleCombineGrandChil
             dispatch,
             state,
         } = this.props;
-        console.log(state.numberA.state);
         return <div>
             <div>
                 <NumberBox {...numberA} state={state.numberA.state} dispatch={this.updateValueCreator(dispatch, "numberA", state.numberA.state)} />
