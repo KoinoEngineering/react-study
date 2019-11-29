@@ -1,0 +1,3 @@
+export const SimpleCombineGrandChildActions = {
+    SIMPLE_COMBINE_GRANDCHILD_UPDATE: "SIMPLE_COMBINE_GRANDCHILD_UPDATE"
+};

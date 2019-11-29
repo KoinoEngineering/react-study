@@ -2,7 +2,9 @@ import { Reducer } from "redux";
 import { RecordOf, List } from "immutable";
 import { IState, State } from "../state";
 import actions, { IAction } from "../action";
+import { RecursiveCombinedReducer } from "./RecursiveCombinedReducer/RecursiveCombinedReducer";
 export const reducer: Reducer<RecordOf<IState>, IAction> = (state = State(), action: IAction) => {
+    state = state.update("recursiveCombinedReducer", (state: IState["recursiveCombinedReducer"]) => { return RecursiveCombinedReducer(state, action); });
     if (document.activeElement && document.activeElement.id) {
         state = state.update("bubblingInRedux", (bubblingInRedux) => {
             return bubblingInRedux.set("activeElementId", document.activeElement && document.activeElement.id);

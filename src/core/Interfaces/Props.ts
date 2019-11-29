@@ -1,0 +1,1 @@
+export type IDRequired<P = {}> = P & { id: string };
