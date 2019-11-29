@@ -18,7 +18,6 @@ export const SimpleCombineGrandChildReducer: Reducer<SimpleCombineGrandChildStat
 }, action: IAction<SimpleCombineGrandChildPayload>): SimpleCombineGrandChildState => {
     switch (action.type) {
         case SimpleCombineGrandChildActions.SIMPLE_COMBINE_GRANDCHILD_UPDATE:
-            console.log({ ...state, [action.payload.target]: { ...action.payload.value } });
             return { ...state, [action.payload.target]: { ...action.payload.value } };
         default:
             return state;
