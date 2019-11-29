@@ -1,14 +1,11 @@
-import { SimpleCombineGrandChildState } from "../../../../../pages/RecursiveCombinedReducer/SimpleCombine/SimpleCombineChild/SimpleCombineGrandChild/SimpleCombineGrandChild";
-import { INumberBoxState } from "../../../../../../react/common/NumberBox/NumberBox";
-
+import { ReduxNumberBoxState, SimpleCombineGrandChildState } from "../../../../../pages/RecursiveCombinedReducer/SimpleCombine/SimpleCombineChild/SimpleCombineGrandChild/SimpleCombineGrandChild";
 
 // 後で移す
-const initialNumberBoxState = (): INumberBoxState => { return "10"; };
-
+const initialNumberBoxState = (state?: ReduxNumberBoxState["state"]): ReduxNumberBoxState => { return { state: state || "10" }; };
 
 export const initialSimpleCombineGrandChildState = (): SimpleCombineGrandChildState => {
     return {
-        numberA: initialNumberBoxState(),
-        numberB: initialNumberBoxState(),
+        numberA: initialNumberBoxState("0"),
+        numberB: initialNumberBoxState("100"),
     };
 };

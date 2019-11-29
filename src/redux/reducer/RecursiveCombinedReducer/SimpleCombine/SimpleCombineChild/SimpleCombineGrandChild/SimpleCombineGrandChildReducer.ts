@@ -10,14 +10,15 @@ export interface SimpleCombineGrandChildPayload {
 
 export const SimpleCombineGrandChildReducer: Reducer<SimpleCombineGrandChildState, IAction> = (state: SimpleCombineGrandChildState = {
     numberA: {
-        state: "10",
+        state: "0",
     },
     numberB: {
-        state: "10",
+        state: "100",
     },
 }, action: IAction<SimpleCombineGrandChildPayload>): SimpleCombineGrandChildState => {
     switch (action.type) {
         case SimpleCombineGrandChildActions.SIMPLE_COMBINE_GRANDCHILD_UPDATE:
+            console.log({ ...state, [action.payload.target]: { ...action.payload.value } });
             return { ...state, [action.payload.target]: { ...action.payload.value } };
         default:
             return state;

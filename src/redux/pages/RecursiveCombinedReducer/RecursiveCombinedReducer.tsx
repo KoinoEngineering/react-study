@@ -1,19 +1,32 @@
 import React from "react";
-import { SimpleCombineProps, SimpleCombine } from "./SimpleCombine/SimpleCombine";
+import { connect } from "react-redux";
+import { IState } from "../../state";
+import { SimpleCombine, SimpleCombineProps, SimpleCombineState } from "./SimpleCombine/SimpleCombine";
+import { RecordOf } from "immutable";
 
 export interface RecursiveCombinedReducerProps {
-    simpleCombine: SimpleCombineProps;
+    state: SimpleCombineState;
+    simpleCombine: Omit<SimpleCombineProps, "state">;
 }
 
-export class RecursiveCombinedReducer extends React.PureComponent<RecursiveCombinedReducerProps, never>{
+class RecursiveCombinedReducer extends React.PureComponent<RecursiveCombinedReducerProps, never>{
     public render() {
         const {
+            state,
             simpleCombine
         } = this.props;
         return <div>
             <div>
-                <SimpleCombine {...simpleCombine} />
+                <SimpleCombine {...simpleCombine} state={state} />
             </div>
         </div>;
     }
 }
+
+const mapstateToProps = (state: RecordOf<IState>) => {
+    return {
+        state: state.recursiveCombinedReducer.simpleCombine
+    };
+};
+
+export default connect(mapstateToProps)(RecursiveCombinedReducer);

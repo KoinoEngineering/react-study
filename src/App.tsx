@@ -8,6 +8,7 @@ import BubblingInRedux from "./redux/pages/BubblingInRedux";
 import { RecordOf } from "immutable";
 import { IState } from "./redux/state";
 import { Dispatchable } from "./redux/interfaces/Dispatchable";
+import RecursiveCombinedReducer from "./redux/pages/RecursiveCombinedReducer/RecursiveCombinedReducer";
 
 const useStyles = makeStyles({
     App: {
@@ -50,13 +51,37 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             <li><Link to='/LifeGame'>LifeGame</Link></li>
                             <li><Link to='/UseMemoTest'>UseMemoTest</Link></li>
                             <li><Link to='/BubblingInRedux'>BubblingInRedux</Link></li>
+                            <li><Link to='/RecursiveCombinedReducer'>RecursiveCombinedReducer</Link></li>
                         </ul>
                         <hr />
-
                         <Route exact path='/' />
                         <Route path='/LifeGame' component={LifeGame} />
                         <Route path='/UseMemoTest' component={UseMemoTest} />
                         <Route path='/BubblingInRedux' render={() => { return <BubblingInRedux state={props.state.get("bubblingInRedux")} dispatch={props.dispatch} />; }} />
+                        <Route path='/RecursiveCombinedReducer' render={() => {
+                            return <RecursiveCombinedReducer simpleCombine={{
+                                childA: {
+                                    grandChildA: {
+                                        numberA: { label: "childA,grandChildA,numberA" },
+                                        numberB: { label: "childA,grandChildA,numberB" },
+                                    },
+                                    grandChildB: {
+                                        numberA: { label: "childA,grandChildB,numberA" },
+                                        numberB: { label: "childA,grandChildB,numberB" },
+                                    },
+                                },
+                                childB: {
+                                    grandChildA: {
+                                        numberA: { label: "childB,grandChildA,numberA" },
+                                        numberB: { label: "childB,grandChildA,numberB" },
+                                    },
+                                    grandChildB: {
+                                        numberA: { label: "childB,grandChildB,numberA" },
+                                        numberB: { label: "childB,grandChildB,numberB" },
+                                    },
+                                },
+                            }} />;
+                        }} />
                     </div>
                 </BrowserRouter>
             </div>

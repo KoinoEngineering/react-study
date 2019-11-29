@@ -2,8 +2,9 @@ import { SimpleCombineChildProps, SimpleCombineChildState, SimpleCombineChild } 
 import React from "react";
 
 export interface SimpleCombineProps {
-    childA: SimpleCombineChildProps,
-    childB: SimpleCombineChildProps,
+    state: SimpleCombineState;
+    childA: Omit<SimpleCombineChildProps, "state">;
+    childB: Omit<SimpleCombineChildProps, "state">;
 }
 
 export interface SimpleCombineState {
@@ -15,14 +16,15 @@ export class SimpleCombine extends React.PureComponent<SimpleCombineProps, never
     public render() {
         const {
             childA,
-            childB
+            childB,
+            state,
         } = this.props;
         return <div>
             <div>
-                <SimpleCombineChild {...childA} />
+                <SimpleCombineChild {...childA} state={state.childA} />
             </div>
             <div>
-                <SimpleCombineChild {...childB} />
+                <SimpleCombineChild {...childB} state={state.childB} />
             </div>
         </div>;
     }

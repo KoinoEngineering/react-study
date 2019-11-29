@@ -1,9 +1,8 @@
 import { Slider, TextField } from "@material-ui/core";
 import { TextFieldProps } from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/styles";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { isArray } from "util";
-import { DISPATCHABLE } from "../../../core/Interfaces/Dispatchable";
 
 const createStyles = makeStyles({
     root: {
@@ -26,8 +25,9 @@ export interface INumberBoxProps {
 }
 
 const NumberBox: React.FC<INumberBoxProps> = (props: INumberBoxProps) => {
-    const [sliderValue, setSlideValue] = useState(parseInt(props.state[DISPATCHABLE.VALUE]));
+    const [sliderValue, setSlideValue] = useState(parseInt(props.state));
     const classes = createStyles();
+    useEffect(() => { setSlideValue(parseInt(props.state)); }, [props.state]);
 
     const handleChangeTextFieldFactory = (dispatcher: React.Dispatch<React.SetStateAction<string>>): React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> => {
         return (e) => {
@@ -44,7 +44,7 @@ const NumberBox: React.FC<INumberBoxProps> = (props: INumberBoxProps) => {
     };
     return <div className={classes.root}>
         <TextField
-            value={props.state[DISPATCHABLE.VALUE]}
+            value={props.state}
             margin="normal"
             variant="outlined"
             label={props.label}
