@@ -1,31 +1,16 @@
+import { RecordOf } from "immutable";
 import { Reducer } from "redux";
-import { RecordOf, List } from "immutable";
+import { IAction } from "../action";
 import { IState, State } from "../state";
-import actions, { IAction } from "../action";
+import { UnitReducer } from "./BubblingInRedux/UnitReducer";
 import { RecursiveCombinedReducer } from "./RecursiveCombinedReducer/RecursiveCombinedReducer";
 export const reducer: Reducer<RecordOf<IState>, IAction> = (state = State(), action: IAction) => {
-    state = state.update("recursiveCombinedReducer", (state: IState["recursiveCombinedReducer"]) => { return RecursiveCombinedReducer(state, action); });
-    if (document.activeElement && document.activeElement.id) {
-        state = state.update("bubblingInRedux", (bubblingInRedux) => {
-            return bubblingInRedux.set("activeElementId", document.activeElement && document.activeElement.id);
+    return state
+        .update("recursiveCombinedReducer", (state: IState["recursiveCombinedReducer"]) => {
+            return RecursiveCombinedReducer(state, action);
+        })
+        .update("bubblingInRedux", (state: IState["bubblingInRedux"]) => {
+            return UnitReducer(state, action);
         });
-    }
-    switch (action.type) {
-        case actions.FIRE_EVENT:
-            return state.update("bubblingInRedux", (bubblingInRedux) => {
-                return bubblingInRedux.update("event", (event) => {
-                    return event.update("log", (log) => {
-                        return log.push(action.payload.type + (action.payload.id ? ":" + action.payload.id : ""));
-                    });
-                });
-            });
-        case actions.CLEAR_EVENT:
-            return state.update("bubblingInRedux", (bubblingInRedux) => {
-                return bubblingInRedux.update("event", (event) => {
-                    return event.set("log", List());
-                });
-            });
-        default:
-            return state;
-    }
+
 };

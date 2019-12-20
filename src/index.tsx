@@ -5,10 +5,12 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { createStore, applyMiddleware } from "redux";
 import { reducer } from "./redux/reducer";
-import { logger } from "redux-logger";
+import { createLogger } from "redux-logger";
 import { Provider } from "react-redux";
 
-const store = process.env.NODE_ENV === "production" ? createStore(reducer) : createStore(reducer, applyMiddleware(logger));
+const store = process.env.NODE_ENV === "production" ? createStore(reducer) : createStore(reducer, applyMiddleware(createLogger({
+    stateTransformer: (state) => { return state.toJS(); }
+})));
 
 const render = () => {
     ReactDOM.render(
