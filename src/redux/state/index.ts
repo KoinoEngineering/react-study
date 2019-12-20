@@ -1,13 +1,13 @@
 import { Record, RecordOf } from "immutable";
-import { BubblingInRedux, IBubblingInRedux } from "./BubblingInRedux";
+import { BubblingInReduxState, IBubblingInReduxState } from "./BubblingInRedux";
 import { initialRecursiveCombinedState, RecursiveCombinedReducerState } from "./RecursiveCombinedReducer/RecursiveCombinedReducer";
 
 export interface IState {
-    bubblingInRedux: RecordOf<IBubblingInRedux>
+    bubblingInRedux: RecordOf<IBubblingInReduxState>
     recursiveCombinedReducer: RecursiveCombinedReducerState
 }
 
 export const State = Record<IState>({
-    bubblingInRedux: BubblingInRedux(),
+    bubblingInRedux: BubblingInReduxState(),
     recursiveCombinedReducer: initialRecursiveCombinedState()
 });

@@ -1,12 +1,10 @@
-import { Record, RecordOf } from "immutable";
-import { IEventInfo, EventInfo } from "./EventInfo";
+import { List, Record, RecordOf } from "immutable";
+import { UnitState, IUnitState } from "./Unit";
 
-export interface IBubblingInRedux {
-    event: RecordOf<IEventInfo>;
-    activeElementId: Element["id"] | undefined | null;
+export interface IBubblingInReduxState {
+    root: RecordOf<IUnitState>;
 }
 
-export const BubblingInRedux = Record<IBubblingInRedux>({
-    activeElementId: undefined,
-    event: new EventInfo(),
+export const BubblingInReduxState = Record<IBubblingInReduxState>({
+    root: new UnitState({ path: List(["root"]) })
 });
