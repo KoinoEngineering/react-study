@@ -13,7 +13,8 @@ export class ReactFactorial extends React.PureComponent<ReactFactorialProps, Rea
         this.state = {
             factorial: {
                 ans: 1,
-                max: 0,
+                delay: 100,
+                fact: 10,
             }
         };
     }

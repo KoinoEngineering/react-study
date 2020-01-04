@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, Dispatch, EventHandler } from "react";
+import React, { ChangeEventHandler, Dispatch, EventHandler, MouseEventHandler } from "react";
 
 
 /**
@@ -9,7 +9,8 @@ import React, { ChangeEventHandler, Dispatch, EventHandler } from "react";
  * @interface FactorialState
  */
 export interface FactorialState {
-    max: number;
+    fact: number;
+    delay: number;
     ans: number;
 }
 
@@ -25,35 +26,87 @@ export interface FactorialProps {
     dispatch: Dispatch<FactorialState>;
 }
 
+interface FactorialInnerState {
+    Enabled: boolean
+}
+
 type HandleFactory<H extends EventHandler<any>> = (state: FactorialState, dispatch: Dispatch<FactorialState>) => H;
 
-export class Factorial extends React.PureComponent<FactorialProps, never>{
+export class Factorial extends React.PureComponent<FactorialProps, FactorialInnerState>{
+    constructor(props: FactorialProps) {
+        super(props);
+        this.state = {
+            Enabled: true
+        };
+    }
 
-    private handleInputChange: HandleFactory<ChangeEventHandler<HTMLInputElement>> = (state, dispatch) => {
+    private handleMaxChange: HandleFactory<ChangeEventHandler<HTMLInputElement>> = (state, dispatch) => {
         return (e) => {
             const tmp = Number(e.currentTarget.value);
-            if (isNaN(tmp)) {
+            if (isNaN(tmp) || tmp < 0) {
                 return;
             }
-            dispatch({ ...state, max: tmp });
+            dispatch({
+                ...state,
+                delay: tmp === 0 ? 0 : 1000 / tmp,
+                fact: tmp,
+            });
+            return;
+        };
+    }
+    private handleDelayChange: HandleFactory<ChangeEventHandler<HTMLInputElement>> = (state, dispatch) => {
+        return (e) => {
+            const tmp = Number(e.currentTarget.value);
+            if (isNaN(tmp) || tmp < 0) {
+                return;
+            }
+            dispatch({ ...state, delay: tmp });
             return;
         };
     }
 
+    private handleCalculateClick: HandleFactory<MouseEventHandler<HTMLButtonElement>> = (state, dispatch) => {
+        return () => {
+            /// ansを1に初期化
+            const newState = { ...state, ans: 1 };
+            this.setState({ Enabled: false });
+            dispatch(newState);
+            /// call setFactorial
+            this.setFactorial(newState, dispatch);
+        };
+    }
+
+    private setFactorial = (state: FactorialState, dispatch: Dispatch<FactorialState>, value: number = 1): void => {
+        if (value > state.fact) {
+            this.setState({ Enabled: true });
+            return;
+        } else {
+            const newState = { ...state, ans: state.ans * value };
+            dispatch(newState);
+            setTimeout(() => {
+                this.setFactorial(newState, dispatch, value + 1);
+            }, newState.delay);
+        }
+    }
+
     public render() {
         const { state, dispatch } = this.props;
+        const innerState = this.state;
         return <div>
             <div className="InputArea">
-                <div className="MaxArea">
-                    <span>Max:</span><span><input type="text" value={state.max} onChange={this.handleInputChange(state, dispatch)} /></span>
+                <div className="MaxArea" style={{ paddingBottom: "1rem" }}>
+                    <span>Fact:</span><span><input disabled={!innerState.Enabled} type="text" value={state.fact} onChange={this.handleMaxChange(state, dispatch)} /></span>
                 </div>
-                <div className="ButtonArea">
-                    <button>calculate</button>
+                <div className="DelayArea" style={{ paddingBottom: "1rem" }}>
+                    <span>Delay:</span><span><input disabled={!innerState.Enabled} type="text" value={state.delay} onChange={this.handleDelayChange(state, dispatch)} /></span>
+                </div>
+                <div className="ButtonArea" style={{ paddingBottom: "1rem" }}>
+                    <button disabled={!innerState.Enabled} onClick={this.handleCalculateClick(state, dispatch)}>calculate</button>
                 </div>
             </div>
-            <div className="AnsArea">
-                {"Ans:" + state.ans}
+            <div className="AnsArea" style={{ paddingBottom: "1rem" }}>
+                {state.fact > 21 ? "Max is too large" : "Ans:" + state.ans}
             </div>
-        </div>;
+        </ div>;
     }
 }
