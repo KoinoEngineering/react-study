@@ -47,8 +47,8 @@ export class Factorial extends React.PureComponent<FactorialProps, FactorialInne
                 return;
             }
             dispatch({
-                ...state,
-                delay: tmp === 0 ? 0 : 1000 / tmp,
+                ans: 1,
+                delay: tmp === 0 ? 1000 : 1000 / tmp,
                 fact: tmp,
             });
             return;
