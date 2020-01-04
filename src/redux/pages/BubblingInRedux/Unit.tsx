@@ -70,7 +70,7 @@ export const Unit: React.FC<IUnitProps> = (props: IUnitProps) => {
                 payload: {
                     path: state.path,
                 },
-                type: UnitAction.UNIT_DUPLICATE_CHILD,
+                type: UnitAction.UNIT_APPEND_CHILD,
             });
         };
     };
@@ -80,7 +80,7 @@ export const Unit: React.FC<IUnitProps> = (props: IUnitProps) => {
                 payload: {
                     path: state.path,
                 },
-                type: UnitAction.UNIT_APPEND_CHILD,
+                type: UnitAction.UNIT_CREATE_CHILDREN,
             });
         };
     };
@@ -94,7 +94,7 @@ export const Unit: React.FC<IUnitProps> = (props: IUnitProps) => {
                         return <div key={child.path.toJS().join(",") + "," + idx}>
                             <Unit state={child} dispatch={props.dispatch} />
                         </div>;
-                    }).push(<div>
+                    }).push(<div key="CreateChild">
                         <Button onClick={onDuplicateHandlerFactory(props.dispatch, props.state)} >子を増やす</Button>
                     </div>)
                     : <div>
