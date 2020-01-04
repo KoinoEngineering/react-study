@@ -14,12 +14,12 @@ export interface UnitPayload {
 
 export const UnitReducer: Reducer<RecordOf<IBubblingInReduxState>, IAction<UnitPayload>> = (state = new BubblingInReduxState({}), action) => {
     switch (action.type) {
-        case UnitAction.UNIT_APPEND_CHILD:
+        case UnitAction.UNIT_CREATE_CHILDREN:
             return state.updateIn(action.payload.path.toJS(), (unit: UnitState) => {
                 return unit.CreateChildren();
             });
 
-        case UnitAction.UNIT_DUPLICATE_CHILD:
+        case UnitAction.UNIT_APPEND_CHILD:
             return state.updateIn(action.payload.path.toJS(), (unit: UnitState) => {
                 return unit.AppendChild();
             });
