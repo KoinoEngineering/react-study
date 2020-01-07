@@ -10,6 +10,7 @@ import { IState } from "./redux/state";
 import { Dispatchable } from "./redux/interfaces/Dispatchable";
 import RecursiveCombinedReducer from "./redux/pages/RecursiveCombinedReducer/RecursiveCombinedReducer";
 import { RecursiveDispatching } from "./Pages/RecursiveDispatching/RecursiveDispatching";
+import { StudyReactTransitionGroup } from "./Pages/StudyReactTransitionGroup/StudyReactTransitionGroup";
 
 const useStyles = makeStyles({
     App: {
@@ -54,6 +55,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             <li><Link to='/BubblingInRedux'>BubblingInRedux</Link></li>
                             <li><Link to='/RecursiveCombinedReducer'>RecursiveCombinedReducer</Link></li>
                             <li><Link to='/RecursiveDispatching'>RecursiveDispatching</Link></li>
+                            <li><Link to='/StudyReactTransitionGroup'>StudyReactTransitionGroup</Link></li>
                         </ul>
                         <hr />
                         <Route exact path='/' />
@@ -85,6 +87,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             }} />;
                         }} />
                         <Route path='/RecursiveDispatching' component={RecursiveDispatching} />
+                        <Route path='/StudyReactTransitionGroup' component={StudyReactTransitionGroup} />
                     </div>
                 </BrowserRouter>
             </div>
