@@ -9,6 +9,7 @@ import { RecordOf } from "immutable";
 import { IState } from "./redux/state";
 import { Dispatchable } from "./redux/interfaces/Dispatchable";
 import RecursiveCombinedReducer from "./redux/pages/RecursiveCombinedReducer/RecursiveCombinedReducer";
+import { RecursiveDispatching } from "./Pages/RecursiveDispatching/RecursiveDispatching";
 
 const useStyles = makeStyles({
     App: {
@@ -52,6 +53,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             <li><Link to='/UseMemoTest'>UseMemoTest</Link></li>
                             <li><Link to='/BubblingInRedux'>BubblingInRedux</Link></li>
                             <li><Link to='/RecursiveCombinedReducer'>RecursiveCombinedReducer</Link></li>
+                            <li><Link to='/RecursiveDispatching'>RecursiveDispatching</Link></li>
                         </ul>
                         <hr />
                         <Route exact path='/' />
@@ -82,6 +84,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                                 },
                             }} />;
                         }} />
+                        <Route path='/RecursiveDispatching' component={RecursiveDispatching} />
                     </div>
                 </BrowserRouter>
             </div>
