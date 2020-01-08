@@ -1,14 +1,23 @@
 import React, { useState } from "react";
-import { Fade, FadeState } from "./Fade/Fade";
-export const StudyTransition: React.FC = () => {
-    const [state, dispatch] = useState<FadeState>({
-        duration: 300,
-        in: false,
-        transitionStyle: "entered",
-    }
-    );
+import TransitionTest, { TransitionTestState } from "./TransitionTest/TransitionTest";
 
-    return <div>
-        <Fade state={state} dispatch={dispatch} />
+export const StudyTransition: React.FC = () => {
+    const [state, dispatch] = useState<TransitionTestState>({
+        transitionProps: {
+            appear: true,
+            enter: true,
+            exit: true,
+            in: true,
+            timeout: 1000,
+        },
+        transitionSettings: {
+            transitionDuration: 1000,
+            transitionProperty: "all",
+            transitionTimingFunction: "ease"
+        }
+    });
+
+    return <div >
+        <TransitionTest state={state} dispatch={dispatch} />
     </div>;
 };
