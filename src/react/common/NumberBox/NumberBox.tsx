@@ -18,7 +18,7 @@ export type INumberBoxState = string;
 
 export interface INumberBoxProps {
     state: INumberBoxState;
-    dispatch: React.Dispatch<React.SetStateAction<string>>;
+    dispatch: React.Dispatch<string>;
     min?: number;
     max?: number;
     label?: TextFieldProps["label"];
@@ -30,7 +30,7 @@ const NumberBox: React.FC<INumberBoxProps> = (props: INumberBoxProps) => {
     const classes = createStyles();
     useEffect(() => { setSlideValue(parseInt(props.state)); }, [props.state]);
 
-    const handleChangeTextFieldFactory = (dispatcher: React.Dispatch<React.SetStateAction<string>>): React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> => {
+    const handleChangeTextFieldFactory = (dispatcher: React.Dispatch<string>): React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> => {
         return (e) => {
             if (!isNaN(Number(e.target.value)) && Number(e.target.value) >= (props.min || 0) && Number(e.target.value) <= (props.max || 100)) {
                 // 先頭の０の繰り返しは外す
@@ -38,7 +38,7 @@ const NumberBox: React.FC<INumberBoxProps> = (props: INumberBoxProps) => {
             }
         };
     };
-    const handleChangeSliderFactory = (dispatcher: React.Dispatch<React.SetStateAction<string>>): ((event: React.ChangeEvent<{}>, value: number | number[]) => void) => {
+    const handleChangeSliderFactory = (dispatcher: React.Dispatch<string>): ((event: React.ChangeEvent<{}>, value: number | number[]) => void) => {
         return (e, value) => {
             !isArray(value) && dispatcher(value.toString());
         };
