@@ -1,4 +1,4 @@
-import { Slider, TextField } from "@material-ui/core";
+import { Slider, TextField, SliderProps } from "@material-ui/core";
 import { TextFieldProps } from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/styles";
 import React, { useState, useEffect } from "react";
@@ -22,6 +22,7 @@ export interface INumberBoxProps {
     min?: number;
     max?: number;
     label?: TextFieldProps["label"];
+    slider?: Pick<SliderProps, "step">;
 }
 
 const NumberBox: React.FC<INumberBoxProps> = (props: INumberBoxProps) => {
@@ -59,6 +60,7 @@ const NumberBox: React.FC<INumberBoxProps> = (props: INumberBoxProps) => {
             marks
             min={props.min || 0}
             max={props.max || 100}
+            {...props.slider}
             valueLabelDisplay="auto"
             onChange={(e, value) => { !isArray(value) && setSlideValue(value); }}
             onChangeCommitted={handleChangeSliderFactory(props.dispatch)}
