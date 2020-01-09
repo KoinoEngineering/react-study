@@ -1,6 +1,6 @@
 import React from "react";
 import StudyTransition, { IStudyTransitionState } from "./StudyTransition/StudyTransition";
-import { useAnchor } from "../../common/Styles/Styles";
+import { useAnchor, useWidth } from "../../common/Styles/Styles";
 import MyDispatch from "../../core/Interfaces/MyDispatch";
 import { childDispatcherFactory } from "../../common/Dispatch";
 
@@ -16,9 +16,10 @@ interface IStudyReactTransitionGroupProps {
 const StudyReactTransitionGroup: React.FC<IStudyReactTransitionGroupProps> = (props: IStudyReactTransitionGroupProps) => {
 
     const AnchorStyle = useAnchor();
+    const WidthStyle = useWidth();
 
     return <div style={{ padding: 10 }}>
-        <div style={{ whiteSpace: "pre-line" }}>
+        <div className={WidthStyle.MaxContent} style={{ margin: "0px auto", whiteSpace: "pre-line", width: "max-content" }}>
             react-transition-groupのindex.d.tsの以下のものについて調査する
             <ul>
                 <li><a href="#Transition" className={AnchorStyle.unset}>Transition</a></li>
