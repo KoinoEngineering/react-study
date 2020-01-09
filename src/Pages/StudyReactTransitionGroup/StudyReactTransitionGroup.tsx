@@ -1,8 +1,19 @@
 import React from "react";
-import { StudyTransition } from "./StudyTransition/StudyTransition";
+import StudyTransition, { IStudyTransitionState } from "./StudyTransition/StudyTransition";
 import { useAnchor } from "../../common/Styles/Styles";
+import MyDispatch from "../../core/Interfaces/MyDispatch";
+import { childDispatcherFactory } from "../../common/Dispatch";
 
-export const StudyReactTransitionGroup = () => {
+export interface IStudyReactTransitionGroupState {
+    studyTransition: IStudyTransitionState;
+}
+interface IStudyReactTransitionGroupProps {
+    state: IStudyReactTransitionGroupState;
+    dispatch: MyDispatch<IStudyReactTransitionGroupState>["Set"]
+}
+
+
+const StudyReactTransitionGroup: React.FC<IStudyReactTransitionGroupProps> = (props: IStudyReactTransitionGroupProps) => {
 
     const AnchorStyle = useAnchor();
 
@@ -22,7 +33,7 @@ export const StudyReactTransitionGroup = () => {
                 <div>
                     <h1 id="Transition">Transition</h1>
                 </div>
-                <StudyTransition />
+                <StudyTransition state={props.state.studyTransition} dispatch={childDispatcherFactory(props.dispatch, props.state, "studyTransition")} />
             </div>
         </div>
         <div>
@@ -59,3 +70,5 @@ export const StudyReactTransitionGroup = () => {
         </div>
     </div>;
 };
+
+export default StudyReactTransitionGroup;
