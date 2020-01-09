@@ -43,45 +43,117 @@ export const useDisplay = makeStyles({
 });
 
 export const useWidth = makeStyles({
+    Auto: {
+        boxSizing: "border-box",
+        width: "auto"
+    },
+    Available: {
+        boxSizing: "border-box",
+        width: "available"
+    },
+    FitContent: {
+        boxSizing: "border-box",
+        width: "fit-content"
+    },
+    Inherit: {
+        boxSizing: "border-box",
+        width: "inherit"
+    },
+    Initial: {
+        boxSizing: "border-box",
+        width: "initial"
+    },
+    Intrinsic: {
+        boxSizing: "border-box",
+        width: "intrinsic"
+    },
+    MaxContent: {
+        boxSizing: "border-box",
+        width: "max-content"
+    },
+    MinContent: {
+        boxSizing: "border-box",
+        width: "min-content"
+    },
+    MinIntrinsic: {
+        boxSizing: "border-box",
+        width: "min-intrinsic"
+    },
+    MozFitContent: {
+        boxSizing: "border-box",
+        width: "-moz-fit-content"
+    },
+    MozInitial: {
+        boxSizing: "border-box",
+        width: "-moz-initial"
+    },
+    MozMaxContent: {
+        boxSizing: "border-box",
+        width: "-moz-max-content"
+    },
+    MozMinContent: {
+        boxSizing: "border-box",
+        width: "-moz-min-content"
+    },
+    Revert: {
+        boxSizing: "border-box",
+        width: "revert"
+    },
+    Unset: {
+        boxSizing: "border-box",
+        width: "unset"
+    },
+    WebkitFillAvailable: {
+        boxSizing: "border-box",
+        width: "-webkit-fill-available"
+    },
+    WebkitFitContent: {
+        boxSizing: "border-box",
+        width: "-webkit-fit-content"
+    },
+    WebkitMaxContent: {
+        boxSizing: "border-box",
+        width: "-webkit-max-content"
+    },
     p10: {
         boxSizing: "border-box",
         width: "10%",
     },
     p100: {
         boxSizing: "border-box",
-        width: "100%"
+        width: "100%",
     },
     p20: {
         boxSizing: "border-box",
-        width: "20%"
+        width: "20%",
     },
     p30: {
         boxSizing: "border-box",
-        width: "30%"
+        width: "30%",
     },
     p40: {
         boxSizing: "border-box",
-        width: "40%"
+        width: "40%",
     },
     p50: {
         boxSizing: "border-box",
-        width: "50%"
+        width: "50%",
     },
     p60: {
         boxSizing: "border-box",
-        width: "60%"
+        width: "60%",
     },
     p70: {
         boxSizing: "border-box",
-        width: "70%"
+        width: "70%",
     },
     p80: {
         boxSizing: "border-box",
-        width: "80%"
+        width: "80%",
     },
     p90: {
         boxSizing: "border-box",
-        width: "90%"
+        width: "90%",
     },
 });
 
