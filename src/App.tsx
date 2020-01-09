@@ -1,5 +1,5 @@
 import { makeStyles, MuiThemeProvider } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Link, Route } from "react-router-dom";
 import Theme from "./core/Theme";
 import LifeGame from "./react/LifeGame";
@@ -10,6 +10,8 @@ import { IState } from "./redux/state";
 import { Dispatchable } from "./redux/interfaces/Dispatchable";
 import RecursiveCombinedReducer from "./redux/pages/RecursiveCombinedReducer/RecursiveCombinedReducer";
 import { RecursiveDispatching } from "./Pages/RecursiveDispatching/RecursiveDispatching";
+import StudyReactTransitionGroup, { IStudyReactTransitionGroupState } from "./Pages/StudyReactTransitionGroup/StudyReactTransitionGroup";
+import { childDispatcherFactory } from "./common/Dispatch";
 
 const useStyles = makeStyles({
     App: {
@@ -34,6 +36,10 @@ const useStyles = makeStyles({
 }
 );
 
+interface IAppState {
+    studyReactTransitionGroup: IStudyReactTransitionGroupState
+}
+
 export interface IAppProps extends Dispatchable {
     state: RecordOf<IState>;
 }
@@ -41,6 +47,29 @@ export interface IAppProps extends Dispatchable {
 const App: React.FC<IAppProps> = (props: IAppProps) => {
 
     const classes = useStyles();
+
+    const [state, dispatch] = useState<IAppState>({
+        studyReactTransitionGroup: {
+            studyTransition: {
+                transitionTest: {
+                    transitionProps: {
+                        appear: true,
+                        enter: true,
+                        exit: true,
+                        in: true,
+                        mountOnEnter: false,
+                        timeout: 1000,
+                        unmountOnExit: false,
+                    },
+                    transitionSettings: {
+                        transitionDuration: 1000,
+                        transitionProperty: "all",
+                        transitionTimingFunction: "ease",
+                    },
+                }
+            }
+        }
+    });
 
     return (
         <MuiThemeProvider theme={Theme}>
@@ -54,6 +83,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             <li><Link to='/BubblingInRedux'>BubblingInRedux</Link></li>
                             <li><Link to='/RecursiveCombinedReducer'>RecursiveCombinedReducer</Link></li>
                             <li><Link to='/RecursiveDispatching'>RecursiveDispatching</Link></li>
+                            <li><Link to='/StudyReactTransitionGroup'>StudyReactTransitionGroup</Link></li>
                         </ul>
                         <hr />
                         <Route exact path='/' />
@@ -85,6 +115,11 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             }} />;
                         }} />
                         <Route path='/RecursiveDispatching' component={RecursiveDispatching} />
+                        <Route path='/StudyReactTransitionGroup' render={() => {
+                            return <StudyReactTransitionGroup
+                                state={state.studyReactTransitionGroup}
+                                dispatch={childDispatcherFactory(dispatch, state, "studyReactTransitionGroup")} />;
+                        }} />
                     </div>
                 </BrowserRouter>
             </div>
