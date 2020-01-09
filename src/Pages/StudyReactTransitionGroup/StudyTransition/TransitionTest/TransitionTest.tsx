@@ -28,23 +28,23 @@ type TransitionStyles = {
 
 const transitionStyles: Partial<TransitionStyles> = {
     entered: {
-        backgroundColor: "#00FF00",
-        color: "#FF00FF",
+        backgroundColor: "#0000FF",
+        color: "#FFFF00",
         width: "75%",
     },
     entering: {
-        backgroundColor: "#FFFF00",
-        color: "#0000FF",
+        backgroundColor: "#FFFFFF",
+        color: "#000000",
         width: "100%",
     },
     exited: {
-        backgroundColor: "#0000FF",
-        color: "#FFFF00",
+        backgroundColor: "#FF0000",
+        color: "#00FFFF",
         width: "50%",
     },
     exiting: {
-        backgroundColor: "#FF00FF",
-        color: "#00FF00",
+        backgroundColor: "#000000",
+        color: "#FFFFFF",
         width: "25%",
     },
 };
@@ -87,7 +87,7 @@ const TransitionTest: React.FC<TransitionTestProps> = (props: TransitionTestProp
                 <TransitionComponentPropsSettings state={props.state.transitionProps} dispatch={childDispatcherFactory(props.dispatch, props.state, "transitionProps")} />
             </div>
         </div>
-        <div className={ClassNames(Display.inlineBlock, Width.p50)} >
+        <div className={ClassNames(Display.inlineBlock, Width.p50)} style={{ verticalAlign: "top" }}>
             <button onClick={() => { props.dispatch({ ...props.state, transitionProps: { ...props.state.transitionProps, in: !transitionProps.in } }); }}>{transitionProps.in ? "Exit" : "Enter"}</button>
             <Transition {...transitionProps}>
                 {(status: keyof TransitionStyles) => {
