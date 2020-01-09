@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { FormControl, MenuItem, Select } from "@material-ui/core";
 import React, { Dispatch } from "react";
 import NumberBox from "../../../../../react/common/NumberBox/NumberBox";
 import { ITransitionSettings } from "../TransitionTest";
@@ -79,12 +79,8 @@ const TransitionSettings: React.FC<ITransitionSettingsProps> = (props: ITransiti
                 </ul>
             </div>
             <FormControl variant="outlined" fullWidth={true}>
-                <InputLabel id="TransitionTimingFunction">
-                    Transition Timing Function
-                </InputLabel>
                 <Select
-                    labelId="TransitionTimingFunction"
-                    id="demo-simple-select-outlined"
+                    id="TransitionTimingFunction"
                     value={props.state.transitionTimingFunction}
                     onChange={handleChangeSelectFactory("transitionTimingFunction")}
                 >
