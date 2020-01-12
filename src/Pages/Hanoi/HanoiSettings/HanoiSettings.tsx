@@ -4,7 +4,7 @@ import { List } from "immutable";
 import React from "react";
 import MyDispatch from "../../../core/Interfaces/MyDispatch";
 import { IPropsBaseReset } from "../../../core/Interfaces/Props";
-import { defaultTowers } from "../Hanoi";
+import { defaultTowers, IHanoiState } from "../Hanoi";
 import { ITowersState, TowersState } from "../Towers/Towers";
 
 export interface IHanoiSettingsState {
@@ -14,7 +14,7 @@ export interface IHanoiSettingsState {
 }
 interface HanoiSettingsProps extends IPropsBaseReset<IHanoiSettingsState> {
     divProps?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-    towersDispatch: MyDispatch<ITowersState>["Reset"];
+    dispatchHanoi: MyDispatch<IHanoiState>["Reset"];
 }
 
 const HanoiKeys: (keyof ITowersState)[] = ["a", "b", "c"];
@@ -57,17 +57,21 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
     const handleClassChange = (
         event: React.ChangeEvent<{ name?: string; value: unknown }>,
     ) => {
-        const _class = event.target.value as number;
-        handleChildSelectChangeFactory("class")(event);
-        props.towersDispatch(() => {
-            return new TowersState({
-                ...defaultTowers(_class),
-                [props.state.now]: List(new Array(_class)
-                    .fill(0)
-                    .map((_, idx) => {
+        const newClass = event.target.value as number;
+        props.dispatchHanoi((prevState) => {
+            return {
+                ...prevState,
+                settings: {
+                    ...props.state,
+                    class: newClass
+                },
+                towers: new TowersState({
+                    ...defaultTowers,
+                    [props.state.now]: List(new Array(newClass).fill(0).map((_, idx) => {
                         return idx + 1;
                     }))
-            });
+                })
+            };
         });
     };
     return <div  {...props.divProps} className={ClassNames(props.divProps?.className, borderStyles.solidBlack1)}>
