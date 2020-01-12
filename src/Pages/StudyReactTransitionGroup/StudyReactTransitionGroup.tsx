@@ -3,6 +3,7 @@ import StudyTransition, { IStudyTransitionState } from "./StudyTransition/StudyT
 import { useAnchor, useWidth } from "../../common/Styles/Styles";
 import MyDispatch from "../../core/Interfaces/MyDispatch";
 import { childDispatcherFactory } from "../../common/Dispatch";
+import StudyCSSTransition from "./StudyCSSTransition/StudyCSSTransition";
 
 export interface IStudyReactTransitionGroupState {
     studyTransition: IStudyTransitionState;
@@ -42,7 +43,9 @@ const StudyReactTransitionGroup: React.FC<IStudyReactTransitionGroupProps> = (pr
                 <div>
                     <h1 id="CSSTransition">CSSTransition</h1>
                 </div>
-                {`export { default as CSSTransition } from './CSSTransition';`}
+                <div>
+                    <StudyCSSTransition />
+                </div>
             </div>
         </div>
         <div>
