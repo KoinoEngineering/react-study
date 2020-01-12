@@ -2,9 +2,9 @@ import { makeStyles, MuiThemeProvider } from "@material-ui/core";
 import { RecordOf } from "immutable";
 import React, { useState } from "react";
 import { BrowserRouter, Link, Route } from "react-router-dom";
-import { childDispatcherFactory } from "./common/Dispatch";
+import { childDispatcherFactory, childDispatcherResetFactory } from "./common/Dispatch";
 import Theme from "./core/Theme";
-import { IHanoiState, initHanoiState } from "./Pages/Hanoi/Hanoi";
+import Hanoi, { IHanoiState, initHanoiState } from "./Pages/Hanoi/Hanoi";
 import { RecursiveDispatching } from "./Pages/RecursiveDispatching/RecursiveDispatching";
 import StudyReactTransitionGroup, { IStudyReactTransitionGroupState } from "./Pages/StudyReactTransitionGroup/StudyReactTransitionGroup";
 import LifeGame from "./react/LifeGame";
@@ -87,6 +87,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             <li><Link to='/RecursiveCombinedReducer'>RecursiveCombinedReducer</Link></li>
                             <li><Link to='/RecursiveDispatching'>RecursiveDispatching</Link></li>
                             <li><Link to='/StudyReactTransitionGroup'>StudyReactTransitionGroup</Link></li>
+                            <li><Link to='/Hanoi'>Hanoi</Link></li>
                         </ul>
                         <hr />
                         <Route exact path='/' />
@@ -122,6 +123,11 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             return <StudyReactTransitionGroup
                                 state={state.studyReactTransitionGroup}
                                 dispatch={childDispatcherFactory(dispatch, state, "studyReactTransitionGroup")} />;
+                        }} />
+                        <Route path='/Hanoi' render={() => {
+                            return <Hanoi
+                                state={state.hanoi}
+                                dispatch={childDispatcherResetFactory(dispatch, state, "hanoi")} />;
                         }} />
                     </div>
                 </BrowserRouter>
