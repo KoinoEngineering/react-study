@@ -3,7 +3,7 @@ import { makeStyles, MenuItem, Select } from "@material-ui/core";
 import { List } from "immutable";
 import React from "react";
 import MyDispatch from "../../../core/Interfaces/MyDispatch";
-import { IPropsBaseReset } from "../../../core/Interfaces/Props";
+import { IPropsBase, IDispatchable } from "../../../core/Interfaces/Props";
 import { defaultTowers, IHanoiState } from "../Hanoi";
 import { ITowersState, TowersState } from "../Towers/Towers";
 
@@ -12,9 +12,11 @@ export interface IHanoiSettingsState {
     now: keyof ITowersState;
     goto: keyof ITowersState;
 }
-interface HanoiSettingsProps extends IPropsBaseReset<IHanoiSettingsState> {
+interface HanoiSettingsProps extends IPropsBase<IHanoiSettingsState>, IDispatchable<IHanoiSettingsState> {
     divProps?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-    dispatchHanoi: MyDispatch<IHanoiState>["Reset"];
+    // useEffectがうまく使えてないないので妥協案
+    stateHanoi: IHanoiState;
+    dispatchHanoi: MyDispatch<IHanoiState>["Set"];
 }
 
 const HanoiKeys: (keyof ITowersState)[] = ["a", "b", "c"];
@@ -40,15 +42,13 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
     })();
 
 
-    const handleChildSelectChangeFactory = <K extends keyof IHanoiSettingsState>(key: K) => {
+    const handleChildSelectChangeFactory = <K extends keyof IHanoiSettingsState>(state: IHanoiSettingsState, key: K) => {
         return (
             event: React.ChangeEvent<{ name?: string; value: unknown }>,
         ) => {
-            props.dispatch((prevState) => {
-                return {
-                    ...prevState,
-                    [key]: event.target.value as IHanoiSettingsState[K]
-                };
+            props.dispatch({
+                ...state,
+                [key]: event.target.value as IHanoiSettingsState[K]
             });
         };
     };
@@ -58,20 +58,18 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
         event: React.ChangeEvent<{ name?: string; value: unknown }>,
     ) => {
         const newClass = event.target.value as number;
-        props.dispatchHanoi((prevState) => {
-            return {
-                ...prevState,
-                settings: {
-                    ...props.state,
-                    class: newClass
-                },
-                towers: new TowersState({
-                    ...defaultTowers,
-                    [props.state.now]: List(new Array(newClass).fill(0).map((_, idx) => {
-                        return idx + 1;
-                    }))
-                })
-            };
+        props.dispatchHanoi({
+            ...props.stateHanoi,
+            settings: {
+                ...props.state,
+                class: newClass
+            },
+            towers: new TowersState({
+                ...defaultTowers,
+                [props.state.now]: List(new Array(newClass).fill(0).map((_, idx) => {
+                    return idx + 1;
+                }))
+            })
         });
     };
     return <div  {...props.divProps} className={ClassNames(props.divProps?.className, borderStyles.solidBlack1)}>
@@ -88,7 +86,7 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
             {"現在地: " + props.state.now}
         </div>
         <div className={paddingStyles.bottom5}>
-            移動先 : <Select classes={selectStyles} value={props.state.goto} onChange={handleChildSelectChangeFactory("goto")} variant={"outlined"}>
+            移動先 : <Select classes={selectStyles} value={props.state.goto} onChange={handleChildSelectChangeFactory(props.state, "goto")} variant={"outlined"}>
                 {HanoiKeys.filter((key: keyof ITowersState) => {
                     return key !== props.state.now;
                 }).map((key: keyof ITowersState) => {

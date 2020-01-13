@@ -1,6 +1,6 @@
 import { List, Record, RecordOf } from "immutable";
 import React from "react";
-import MyDispatch from "../../../core/Interfaces/MyDispatch";
+import { IPropsBase, IDispatchable } from "../../../core/Interfaces/Props";
 
 export type ITowersState = RecordOf<ITowers>;
 export interface ITowers {
@@ -33,9 +33,8 @@ export class TowersState extends Record<ITowers>({
     }
 }
 
-interface ITowersProps {
-    state: ITowersState;
-    dispatch: MyDispatch<ITowersState>["Reset"];
+interface ITowersProps extends IPropsBase<ITowersState>, IDispatchable<ITowersState> {
+    class: number;
 }
 
 const Towers: React.FC<ITowersProps> = (props: ITowersProps) => {

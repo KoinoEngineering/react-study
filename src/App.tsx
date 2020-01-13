@@ -2,7 +2,7 @@ import { makeStyles, MuiThemeProvider } from "@material-ui/core";
 import { RecordOf } from "immutable";
 import React, { useState } from "react";
 import { BrowserRouter, Link, Route } from "react-router-dom";
-import { childDispatcherFactory, childDispatcherResetFactory } from "./common/Dispatch";
+import { childDispatcherFactory } from "./common/Dispatch";
 import Theme from "./core/Theme";
 import Hanoi, { IHanoiState, initHanoiState } from "./Pages/Hanoi/Hanoi";
 import { RecursiveDispatching } from "./Pages/RecursiveDispatching/RecursiveDispatching";
@@ -127,7 +127,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                         <Route path='/Hanoi' render={() => {
                             return <Hanoi
                                 state={state.hanoi}
-                                dispatch={childDispatcherResetFactory(dispatch, state, "hanoi")} />;
+                                dispatch={childDispatcherFactory(dispatch, state, "hanoi")} />;
                         }} />
                     </div>
                 </BrowserRouter>
