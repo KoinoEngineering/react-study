@@ -132,7 +132,10 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
                 series={series}
             />
         </div>
-        <div>{JSON.stringify(tasks)}</div>
+        <div>
+            <div>Tasks</div>
+            <div>{tasks.map((task, idx) => { return <div key={JSON.stringify(task) + "_" + idx}>{task.join(" -> ")}</div>; })}</div>
+        </div>
     </div>;
 };
 
