@@ -1,5 +1,5 @@
 import { List } from "immutable";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { childDispatcherFactory } from "../../common/Dispatch";
 import { IDispatchable, IPropsBase } from "../../core/Interfaces/Props";
 import HanoiSettings, { IHanoiSettingsState } from "./HanoiSettings/HanoiSettings";
@@ -33,7 +33,7 @@ export const initHanoiState = (): IHanoiState => {
 type IHanoiProps = IPropsBase<IHanoiState> & IDispatchable<IHanoiState>;
 
 interface HanoiInnerState {
-    processing: boolean;
+    state: "calculating" | "processing" | "finished";
     tasks: IHanoiTasks;
 }
 
@@ -42,13 +42,36 @@ type IHanoiTasks = ([keyof ITowers, keyof ITowers])[];
 
 const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
 
-    const [innerState, dispatchInner] = useState<HanoiInnerState>({
-        processing: false,
-        tasks: [],
+    const [innerState, innerDispatch] = useState<HanoiInnerState>({
+        state: "finished",
+        tasks: [] as IHanoiTasks,
     });
 
     const dispatchSettings = childDispatcherFactory(props.dispatch, props.state, "settings");
-
+    const tasks = innerState.tasks;
+    const { dispatch, state } = props;
+    useEffect(() => {
+        const task = tasks.shift();
+        if (task) {
+            innerDispatch((prev) => {
+                return {
+                    ...prev,
+                    tasks: [...tasks]
+                };
+            });
+            dispatch({
+                ...state,
+                towers: state.towers.Move(task[0], task[1])
+            });
+        } else {
+            innerDispatch((prev) => {
+                return {
+                    ...prev,
+                    state: "finished"
+                };
+            });
+        }
+    }, [tasks, dispatch, state]);
     return <div>
         <div>
             <HanoiSettings
@@ -59,42 +82,40 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
             />
         </div>
         <div style={{ paddingBottom: 5, paddingTop: 5 }}>
-            <button disabled={innerState.processing} onClick={() => {
-                dispatchInner((prevState) => {
-                    return {
-                        ...prevState,
-                        processing: !prevState.processing
-                    };
-                });
-
+            <button disabled={innerState.state !== "finished"} onClick={() => {
                 const tmp: keyof ITowers | undefined = keys.find((value) => {
                     return value !== props.state.settings.now && value !== props.state.settings.goto;
                 });
 
                 if (!tmp) {
-                    throw "An unexpected error has occurred";
+                    throw new Error("An unexpected error has occurred");
                 }
+
+                console.log("calclate start:" + new Date());
+                innerDispatch((prev) => {
+                    return {
+                        ...prev,
+                        state: "calculating",
+                    };
+                });
                 setTimeout(() => {
-                    console.log(hanoiEntry(
-                        props.state.settings.class,
-                        props.state.settings.now,
-                        props.state.settings.goto,
-                        tmp
-                    ));
-                    setTimeout(() => {
-                        dispatchInner((prevState) => {
-                            return {
-                                ...prevState,
-                                processing: !prevState.processing
-                            };
-                        });
-                    }, 1000);
+                    innerDispatch({
+                        state: "processing",
+                        tasks: hanoiEntry(
+                            props.state.settings.class,
+                            props.state.settings.now,
+                            props.state.settings.goto,
+                            tmp
+                        )
+                    });
+                    console.log("calclate end:" + new Date());
                 }, 1000);
-            }}  >{innerState.processing ? "processing..." : "start"}</button>
+            }}  >{innerState.state === "finished" ? "start" : (innerState.state + "...")}</button>
         </div>
         <div>
             <Towers state={props.state.towers} dispatch={childDispatcherFactory(props.dispatch, props.state, "towers")} class={props.state.settings.class} />
         </div>
+        <div>{JSON.stringify(innerState.tasks)}</div>
     </div>;
 };
 
@@ -112,8 +133,8 @@ const hanoi = (classes: number, ans: string, from: keyof ITowers, to: keyof ITow
     }
 };
 
-const hanoiEntry = (classes: number, from: keyof ITowers, to: keyof ITowers, tmp: keyof ITowers): (keyof ITowers[])[] => {
-    const ret: (keyof ITowers[])[] = JSON.parse("[" + hanoi(classes, "", from, to, tmp) + "[\"\",\"\"]]");
+const hanoiEntry = (classes: number, from: keyof ITowers, to: keyof ITowers, tmp: keyof ITowers): IHanoiTasks => {
+    const ret: IHanoiTasks = JSON.parse("[" + hanoi(classes, "", from, to, tmp) + "[\"\",\"\"]]");
     ret.pop();
     return ret;
 };
