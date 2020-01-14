@@ -66,7 +66,7 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
     };
 
 
-    const handleClassChange = (
+    const handleSeriesChange = (
         event: React.ChangeEvent<{ name?: string; value: unknown }>,
     ) => {
         const newClass = event.target.value as number;
@@ -89,7 +89,7 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
     return <div  {...divProps} className={ClassNames(divProps?.className, borderStyles.solidBlack1)}>
         <div><h3>Settings</h3></div>
         <div className={paddingStyles.bottom5}>
-            段数 :  <Select classes={selectStyles} value={state.series} onChange={handleClassChange} variant={"outlined"}>
+            段数 :  <Select classes={selectStyles} value={state.series} onChange={handleSeriesChange} variant={"outlined"}>
                 {new Array<number>(20).fill(0).map((_, idx) => {
                     const tmp = idx + 1;
                     return <MenuItem key={"class_" + tmp} value={tmp}>{tmp}</MenuItem>;
