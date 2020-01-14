@@ -14,7 +14,7 @@ export interface IHanoiSettingsState {
     series: number;
     delay: number;
     fromKey: keyof ITowers;
-    goto: keyof ITowers;
+    toKey: keyof ITowers;
 }
 interface HanoiSettingsProps extends IPropsBase<IHanoiSettingsState>, IDispatchable<IHanoiSettingsState> {
     divProps?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
@@ -92,7 +92,7 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
             {"現在地: " + props.state.fromKey}
         </div>
         <div className={paddingStyles.bottom5}>
-            移動先 : <Select classes={selectStyles} value={props.state.goto} onChange={handleChildSelectChangeFactory(props.state, "goto")} variant={"outlined"}>
+            移動先 : <Select classes={selectStyles} value={props.state.toKey} onChange={handleChildSelectChangeFactory(props.state, "toKey")} variant={"outlined"}>
                 {HanoiKeys.filter((key: keyof ITowers) => {
                     return key !== props.state.fromKey;
                 }).map((key: keyof ITowers) => {
