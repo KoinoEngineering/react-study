@@ -6,9 +6,13 @@ import MyDispatch from "../../../core/Interfaces/MyDispatch";
 import { IPropsBase, IDispatchable } from "../../../core/Interfaces/Props";
 import { defaultTowers, IHanoiState } from "../Hanoi";
 import { TowersState, ITowers } from "../Towers/Towers";
+import NumberBox from "../../../react/common/NumberBox/NumberBox";
+import { childDispatcherFactory } from "../../../common/Dispatch";
+import { useDisplay } from "../../../common/Styles/Styles";
 
 export interface IHanoiSettingsState {
     class: number;
+    delay: number;
     now: keyof ITowers;
     goto: keyof ITowers;
 }
@@ -72,6 +76,8 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
             })
         });
     };
+
+    const displayStyles = useDisplay();
     return <div  {...props.divProps} className={ClassNames(props.divProps?.className, borderStyles.solidBlack1)}>
         <div><h3>Settings</h3></div>
         <div className={paddingStyles.bottom5}>
@@ -93,6 +99,16 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
                     return <MenuItem key={key} value={key} >{key}</MenuItem>;
                 })}
             </Select>
+        </div>
+        <div className={paddingStyles.bottom5}>
+            <div className={ClassNames(displayStyles.inlineBlock, "MuiFormControl-marginNormal")} style={{ verticalAlign: "top", }}>間隔(ms)&nbsp;:&nbsp;</div><NumberBox
+                state={props.state.delay.toString()}
+                dispatch={(value: string) => { childDispatcherFactory(props.dispatch, props.state, "delay")(Number(value)); }}
+                max={1000}
+                slider={{
+                    step: 50
+                }}
+            />
         </div>
     </div>;
 };

@@ -23,6 +23,7 @@ export const initHanoiState = (): IHanoiState => {
         progress: "finished",
         settings: {
             class: 3,
+            delay: 300,
             goto: "c",
             now: "a",
         },
