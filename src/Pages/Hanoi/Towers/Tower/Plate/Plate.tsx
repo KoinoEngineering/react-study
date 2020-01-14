@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import React from "react";
 import { Transition } from "react-transition-group";
 import { TransitionStatus } from "react-transition-group/Transition";
 
 interface IPlateProps {
+    in: boolean;
     max: number;
     size: number;
     timeout: number;
@@ -29,8 +30,8 @@ const transitionStyle = (rate: number): TransitionStyle => {
             width: (rate * 100) + "%",
         },
         exited: {
-            width: 0
-        }
+            width: 0,
+        },
     };
 };
 
@@ -42,18 +43,14 @@ const Plate: React.FC<IPlateProps> = (props: IPlateProps) => {
     } = props;
     const rate = size / max;
 
-    const [inState, inDispatch] = useState<boolean>(false);
-    useEffect(() => {
-        if (!inState) {
-            inDispatch(true);
-        }
-    }, [inState, inDispatch]);
     return <Transition
         appear={true}
         enter={false}
         exit={false}
-        in={inState}
+        in={props.in}
         timeout={timeout}
+        unmountOnExit={true}
+        mountOnEnter={true}
     >
         {(state) => {
             return <div style={{

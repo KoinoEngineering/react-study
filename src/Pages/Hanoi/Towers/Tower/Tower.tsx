@@ -29,7 +29,7 @@ const Tower: React.FC<ITowerProps> = (props: ITowerProps) => {
                     .fill(0))
                     .concat(tower)
                     .map((value, idx) => {
-                        return <Plate key={name + "_" + idx} size={value} max={series} timeout={delay} />;
+                        return <Plate key={name + "_" + idx} size={value} max={series} timeout={delay} in={true} />;
                     })}
         </TransitionGroup>
     </div>;
