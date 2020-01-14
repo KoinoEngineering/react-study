@@ -76,7 +76,7 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
         <div><h3>Settings</h3></div>
         <div className={paddingStyles.bottom5}>
             段数 :  <Select classes={selectStyles} value={props.state.class} onChange={handleClassChange} variant={"outlined"}>
-                {new Array<number>(100).fill(0).map((_, idx) => {
+                {new Array<number>(20).fill(0).map((_, idx) => {
                     const tmp = idx + 1;
                     return <MenuItem key={"class_" + tmp} value={tmp}>{tmp}</MenuItem>;
                 })}
