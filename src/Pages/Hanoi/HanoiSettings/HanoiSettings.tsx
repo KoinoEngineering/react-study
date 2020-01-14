@@ -27,6 +27,14 @@ const HanoiKeys: (keyof ITowers)[] = ["a", "b", "c"];
 
 const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) => {
 
+    const {
+        dispatch,
+        state,
+        dispatchHanoi,
+        stateHanoi,
+        divProps
+    } = props;
+
     const paddingStyles = makeStyles({
         bottom5: {
             paddingBottom: 5
@@ -50,7 +58,7 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
         return (
             event: React.ChangeEvent<{ name?: string; value: unknown }>,
         ) => {
-            props.dispatch({
+            dispatch({
                 ...state,
                 [key]: event.target.value as IHanoiSettingsState[K]
             });
@@ -62,15 +70,15 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
         event: React.ChangeEvent<{ name?: string; value: unknown }>,
     ) => {
         const newClass = event.target.value as number;
-        props.dispatchHanoi({
-            ...props.stateHanoi,
+        dispatchHanoi({
+            ...stateHanoi,
             settings: {
-                ...props.state,
+                ...state,
                 series: newClass
             },
             towers: new TowersState({
                 ...defaultTowers,
-                [props.state.fromKey]: List(new Array(newClass).fill(0).map((_, idx) => {
+                [state.fromKey]: List(new Array(newClass).fill(0).map((_, idx) => {
                     return idx + 1;
                 }))
             })
@@ -78,23 +86,23 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
     };
 
     const displayStyles = useDisplay();
-    return <div  {...props.divProps} className={ClassNames(props.divProps?.className, borderStyles.solidBlack1)}>
+    return <div  {...divProps} className={ClassNames(divProps?.className, borderStyles.solidBlack1)}>
         <div><h3>Settings</h3></div>
         <div className={paddingStyles.bottom5}>
-            段数 :  <Select classes={selectStyles} value={props.state.series} onChange={handleClassChange} variant={"outlined"}>
+            段数 :  <Select classes={selectStyles} value={state.series} onChange={handleClassChange} variant={"outlined"}>
                 {new Array<number>(20).fill(0).map((_, idx) => {
                     const tmp = idx + 1;
                     return <MenuItem key={"class_" + tmp} value={tmp}>{tmp}</MenuItem>;
                 })}
-            </Select> (手数 : {(2 ** props.state.series) - 1}手)
+            </Select> (手数 : {(2 ** state.series) - 1}手)
         </div>
         <div className={paddingStyles.bottom5}>
-            {"現在地: " + props.state.fromKey}
+            {"現在地: " + state.fromKey}
         </div>
         <div className={paddingStyles.bottom5}>
-            移動先 : <Select classes={selectStyles} value={props.state.toKey} onChange={handleChildSelectChangeFactory(props.state, "toKey")} variant={"outlined"}>
+            移動先 : <Select classes={selectStyles} value={state.toKey} onChange={handleChildSelectChangeFactory(state, "toKey")} variant={"outlined"}>
                 {HanoiKeys.filter((key: keyof ITowers) => {
-                    return key !== props.state.fromKey;
+                    return key !== state.fromKey;
                 }).map((key: keyof ITowers) => {
                     return <MenuItem key={key} value={key} >{key}</MenuItem>;
                 })}
@@ -102,8 +110,8 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
         </div>
         <div className={paddingStyles.bottom5}>
             <div className={ClassNames(displayStyles.inlineBlock, "MuiFormControl-marginNormal")} style={{ verticalAlign: "top", }}>間隔(ms)&nbsp;:&nbsp;</div><NumberBox
-                state={props.state.delay.toString()}
-                dispatch={(value: string) => { childDispatcherFactory(props.dispatch, props.state, "delay")(Number(value)); }}
+                state={state.delay.toString()}
+                dispatch={(value: string) => { childDispatcherFactory(dispatch, state, "delay")(Number(value)); }}
                 max={1000}
                 slider={{
                     step: 50

@@ -41,7 +41,6 @@ const keys: (keyof ITowers)[] = ["a", "b", "c"];
 type IHanoiTasks = ([keyof ITowers, keyof ITowers])[];
 const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
 
-    const dispatchSettings = childDispatcherFactory(props.dispatch, props.state, "settings");
     const {
         dispatch,
         state,
@@ -49,11 +48,17 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
             progress,
             tasks,
             towers,
+            settings,
             settings: {
-                delay
+                delay,
+                fromKey,
+                series,
+                toKey,
             }
         }
     } = props;
+
+    const dispatchSettings = childDispatcherFactory(dispatch, state, "settings");
     useEffect(() => {
         setTimeout(() => {
             const task = tasks.shift();
@@ -69,10 +74,10 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
                         ...state,
                         progress: "finished",
                         settings: {
-                            ...state.settings,
-                            fromKey: state.settings.toKey,
+                            ...settings,
+                            fromKey: toKey,
                             toKey: keys.filter((key) => {
-                                return key !== state.settings.toKey;
+                                return key !== toKey;
                             })[0],
                         }
                     });
@@ -83,16 +88,16 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
     return <div>
         <div>
             <HanoiSettings
-                state={props.state.settings}
+                state={settings}
                 dispatch={dispatchSettings}
-                stateHanoi={props.state}
-                dispatchHanoi={props.dispatch}
+                stateHanoi={state}
+                dispatchHanoi={dispatch}
             />
         </div>
         <div style={{ paddingBottom: 5, paddingTop: 5 }}>
             <button disabled={progress !== "finished"} onClick={() => {
                 const tmp: keyof ITowers | undefined = keys.find((value) => {
-                    return value !== props.state.settings.fromKey && value !== props.state.settings.toKey;
+                    return value !== fromKey && value !== toKey;
                 });
 
                 if (!tmp) {
@@ -109,9 +114,9 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
                         ...state,
                         progress: "processing",
                         tasks: hanoiEntry(
-                            props.state.settings.series,
-                            props.state.settings.fromKey,
-                            props.state.settings.toKey,
+                            series,
+                            fromKey,
+                            toKey,
                             tmp
                         )
                     });
@@ -123,8 +128,8 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
             <Towers
                 delay={delay}
                 state={towers}
-                dispatch={childDispatcherFactory(props.dispatch, props.state, "towers")}
-                series={props.state.settings.series}
+                dispatch={childDispatcherFactory(dispatch, state, "towers")}
+                series={series}
             />
         </div>
         <div>{JSON.stringify(tasks)}</div>
