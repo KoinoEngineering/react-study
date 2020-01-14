@@ -1,8 +1,9 @@
-import { List, Record, RecordOf } from "immutable";
+import { makeStyles } from "@material-ui/core";
+import { List, Record } from "immutable";
 import React from "react";
-import { IPropsBase, IDispatchable } from "../../../core/Interfaces/Props";
+import { IDispatchable, IPropsBase } from "../../../core/Interfaces/Props";
+import Tower from "./Tower/Tower";
 
-export type ITowersState = RecordOf<ITowers>;
 export interface ITowers {
     a: List<number>
     b: List<number>
@@ -33,11 +34,24 @@ export class TowersState extends Record<ITowers>({
     }
 }
 
-interface ITowersProps extends IPropsBase<ITowersState>, IDispatchable<ITowersState> {
+interface ITowersProps extends IPropsBase<TowersState>, IDispatchable<TowersState> {
     class: number;
 }
 
 const Towers: React.FC<ITowersProps> = (props: ITowersProps) => {
-    return <div>{JSON.stringify(props)}</div>;
+
+    const borderStyle = makeStyles({
+        solidBalck1: {
+            border: "solid black 1px",
+        }
+    })();
+
+    return <div className={borderStyle.solidBalck1}>
+        <Tower tower={props.state.a} class={props.class} />
+        <Tower tower={props.state.b} class={props.class} />
+        <Tower tower={props.state.c} class={props.class} />
+    </div>;
 };
+
+
 export default Towers;

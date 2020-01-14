@@ -5,12 +5,12 @@ import React from "react";
 import MyDispatch from "../../../core/Interfaces/MyDispatch";
 import { IPropsBase, IDispatchable } from "../../../core/Interfaces/Props";
 import { defaultTowers, IHanoiState } from "../Hanoi";
-import { ITowersState, TowersState } from "../Towers/Towers";
+import { TowersState, ITowers } from "../Towers/Towers";
 
 export interface IHanoiSettingsState {
     class: number;
-    now: keyof ITowersState;
-    goto: keyof ITowersState;
+    now: keyof ITowers;
+    goto: keyof ITowers;
 }
 interface HanoiSettingsProps extends IPropsBase<IHanoiSettingsState>, IDispatchable<IHanoiSettingsState> {
     divProps?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
@@ -19,7 +19,7 @@ interface HanoiSettingsProps extends IPropsBase<IHanoiSettingsState>, IDispatcha
     dispatchHanoi: MyDispatch<IHanoiState>["Set"];
 }
 
-const HanoiKeys: (keyof ITowersState)[] = ["a", "b", "c"];
+const HanoiKeys: (keyof ITowers)[] = ["a", "b", "c"];
 
 const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) => {
 
@@ -80,16 +80,16 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
                     const tmp = idx + 1;
                     return <MenuItem key={"class_" + tmp} value={tmp}>{tmp}</MenuItem>;
                 })}
-            </Select>
+            </Select> (手数 : {(2 ** props.state.class) - 1}手)
         </div>
         <div className={paddingStyles.bottom5}>
             {"現在地: " + props.state.now}
         </div>
         <div className={paddingStyles.bottom5}>
             移動先 : <Select classes={selectStyles} value={props.state.goto} onChange={handleChildSelectChangeFactory(props.state, "goto")} variant={"outlined"}>
-                {HanoiKeys.filter((key: keyof ITowersState) => {
+                {HanoiKeys.filter((key: keyof ITowers) => {
                     return key !== props.state.now;
-                }).map((key: keyof ITowersState) => {
+                }).map((key: keyof ITowers) => {
                     return <MenuItem key={key} value={key} >{key}</MenuItem>;
                 })}
             </Select>
