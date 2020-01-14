@@ -1,4 +1,3 @@
-import { makeStyles } from "@material-ui/core";
 import { List, Record } from "immutable";
 import React from "react";
 import { IDispatchable, IPropsBase } from "../../../core/Interfaces/Props";
@@ -51,13 +50,7 @@ const Towers: React.FC<ITowersProps> = (props: ITowersProps) => {
         }
     } = props;
 
-    const borderStyle = makeStyles({
-        solidBalck1: {
-            border: "solid black 1px",
-        }
-    })();
-
-    return <div className={borderStyle.solidBalck1}>
+    return <div>
         <Tower tower={a} series={series} name={"a"} delay={delay} />
         <Tower tower={b} series={series} name={"b"} delay={delay} />
         <Tower tower={c} series={series} name={"c"} delay={delay} />
