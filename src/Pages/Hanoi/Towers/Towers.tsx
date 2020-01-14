@@ -47,9 +47,9 @@ const Towers: React.FC<ITowersProps> = (props: ITowersProps) => {
     })();
 
     return <div className={borderStyle.solidBalck1}>
-        <Tower tower={props.state.a} class={props.class} />
-        <Tower tower={props.state.b} class={props.class} />
-        <Tower tower={props.state.c} class={props.class} />
+        <Tower tower={props.state.a} class={props.class} name={"a"} />
+        <Tower tower={props.state.b} class={props.class} name={"b"} />
+        <Tower tower={props.state.c} class={props.class} name={"c"} />
     </div>;
 };
 

@@ -1,12 +1,14 @@
 import { List } from "immutable";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { childDispatcherFactory } from "../../common/Dispatch";
 import { IDispatchable, IPropsBase } from "../../core/Interfaces/Props";
 import HanoiSettings, { IHanoiSettingsState } from "./HanoiSettings/HanoiSettings";
 import Towers, { ITowers, TowersState } from "./Towers/Towers";
 
 export interface IHanoiState {
+    progress: "calculating" | "processing" | "finished";
     settings: IHanoiSettingsState;
+    tasks: IHanoiTasks;
     towers: TowersState;
 }
 
@@ -18,11 +20,13 @@ export const defaultTowers = Object.freeze({
 
 export const initHanoiState = (): IHanoiState => {
     return {
+        progress: "finished",
         settings: {
             class: 3,
             goto: "c",
             now: "a",
         },
+        tasks: [],
         towers: new TowersState({
             ...defaultTowers,
             a: List([1, 2, 3]),
@@ -32,46 +36,47 @@ export const initHanoiState = (): IHanoiState => {
 
 type IHanoiProps = IPropsBase<IHanoiState> & IDispatchable<IHanoiState>;
 
-interface HanoiInnerState {
-    state: "calculating" | "processing" | "finished";
-    tasks: IHanoiTasks;
-}
-
 const keys: (keyof ITowers)[] = ["a", "b", "c"];
 type IHanoiTasks = ([keyof ITowers, keyof ITowers])[];
-
+export const DELAY = 1000;
 const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
 
-    const [innerState, innerDispatch] = useState<HanoiInnerState>({
-        state: "finished",
-        tasks: [] as IHanoiTasks,
-    });
-
     const dispatchSettings = childDispatcherFactory(props.dispatch, props.state, "settings");
-    const tasks = innerState.tasks;
-    const { dispatch, state } = props;
-    useEffect(() => {
-        const task = tasks.shift();
-        if (task) {
-            innerDispatch((prev) => {
-                return {
-                    ...prev,
-                    tasks: [...tasks]
-                };
-            });
-            dispatch({
-                ...state,
-                towers: state.towers.Move(task[0], task[1])
-            });
-        } else {
-            innerDispatch((prev) => {
-                return {
-                    ...prev,
-                    state: "finished"
-                };
-            });
+    const {
+        dispatch,
+        state,
+        state: {
+            progress,
+            tasks,
+            towers,
         }
-    }, [tasks, dispatch, state]);
+    } = props;
+    useEffect(() => {
+        setTimeout(() => {
+            const task = tasks.shift();
+            if (task) {
+                dispatch({
+                    ...state,
+                    tasks: [...tasks],
+                    towers: towers.Move(task[0], task[1]),
+                });
+            } else {
+                if (progress === "processing") {
+                    dispatch({
+                        ...state,
+                        progress: "finished",
+                        settings: {
+                            ...state.settings,
+                            goto: keys.filter((key) => {
+                                return key !== state.settings.goto;
+                            })[0],
+                            now: state.settings.goto,
+                        }
+                    });
+                }
+            }
+        }, DELAY);
+    }, [dispatch, state, progress, tasks, towers]);
     return <div>
         <div>
             <HanoiSettings
@@ -82,7 +87,7 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
             />
         </div>
         <div style={{ paddingBottom: 5, paddingTop: 5 }}>
-            <button disabled={innerState.state !== "finished"} onClick={() => {
+            <button disabled={progress !== "finished"} onClick={() => {
                 const tmp: keyof ITowers | undefined = keys.find((value) => {
                     return value !== props.state.settings.now && value !== props.state.settings.goto;
                 });
@@ -92,15 +97,14 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
                 }
 
                 console.log("calclate start:" + new Date());
-                innerDispatch((prev) => {
-                    return {
-                        ...prev,
-                        state: "calculating",
-                    };
+                dispatch({
+                    ...state,
+                    progress: "calculating"
                 });
                 setTimeout(() => {
-                    innerDispatch({
-                        state: "processing",
+                    dispatch({
+                        ...state,
+                        progress: "processing",
                         tasks: hanoiEntry(
                             props.state.settings.class,
                             props.state.settings.now,
@@ -110,12 +114,12 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
                     });
                     console.log("calclate end:" + new Date());
                 }, 1000);
-            }}  >{innerState.state === "finished" ? "start" : (innerState.state + "...")}</button>
+            }}  >{progress === "finished" ? "start" : (progress + "...")}</button>
         </div>
         <div>
             <Towers state={props.state.towers} dispatch={childDispatcherFactory(props.dispatch, props.state, "towers")} class={props.state.settings.class} />
         </div>
-        <div>{JSON.stringify(innerState.tasks)}</div>
+        <div>{JSON.stringify(tasks)}</div>
     </div>;
 };
 
