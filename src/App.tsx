@@ -1,17 +1,18 @@
 import { makeStyles, MuiThemeProvider } from "@material-ui/core";
+import { RecordOf } from "immutable";
 import React, { useState } from "react";
 import { BrowserRouter, Link, Route } from "react-router-dom";
+import { childDispatcherFactory } from "./common/Dispatch";
 import Theme from "./core/Theme";
-import LifeGame from "./react/LifeGame";
-import { UseMemoTest } from "./react/UseMemoTest/UseMemoTest";
-import BubblingInRedux from "./redux/pages/BubblingInRedux";
-import { RecordOf } from "immutable";
-import { IState } from "./redux/state";
-import { Dispatchable } from "./redux/interfaces/Dispatchable";
-import RecursiveCombinedReducer from "./redux/pages/RecursiveCombinedReducer/RecursiveCombinedReducer";
+import Hanoi, { IHanoiState, initHanoiState } from "./Pages/Hanoi/Hanoi";
 import { RecursiveDispatching } from "./Pages/RecursiveDispatching/RecursiveDispatching";
 import StudyReactTransitionGroup, { IStudyReactTransitionGroupState } from "./Pages/StudyReactTransitionGroup/StudyReactTransitionGroup";
-import { childDispatcherFactory } from "./common/Dispatch";
+import LifeGame from "./react/LifeGame";
+import { UseMemoTest } from "./react/UseMemoTest/UseMemoTest";
+import { Dispatchable } from "./redux/interfaces/Dispatchable";
+import BubblingInRedux from "./redux/pages/BubblingInRedux";
+import RecursiveCombinedReducer from "./redux/pages/RecursiveCombinedReducer/RecursiveCombinedReducer";
+import { IState } from "./redux/state";
 
 const useStyles = makeStyles({
     App: {
@@ -37,7 +38,8 @@ const useStyles = makeStyles({
 );
 
 interface IAppState {
-    studyReactTransitionGroup: IStudyReactTransitionGroupState
+    hanoi: IHanoiState;
+    studyReactTransitionGroup: IStudyReactTransitionGroupState;
 }
 
 export interface IAppProps extends Dispatchable {
@@ -49,6 +51,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
     const classes = useStyles();
 
     const [state, dispatch] = useState<IAppState>({
+        hanoi: initHanoiState(),
         studyReactTransitionGroup: {
             studyTransition: {
                 transitionTest: {
@@ -84,6 +87,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             <li><Link to='/RecursiveCombinedReducer'>RecursiveCombinedReducer</Link></li>
                             <li><Link to='/RecursiveDispatching'>RecursiveDispatching</Link></li>
                             <li><Link to='/StudyReactTransitionGroup'>StudyReactTransitionGroup</Link></li>
+                            <li><Link to='/Hanoi'>Hanoi</Link></li>
                         </ul>
                         <hr />
                         <Route exact path='/' />
@@ -119,6 +123,11 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
                             return <StudyReactTransitionGroup
                                 state={state.studyReactTransitionGroup}
                                 dispatch={childDispatcherFactory(dispatch, state, "studyReactTransitionGroup")} />;
+                        }} />
+                        <Route path='/Hanoi' render={() => {
+                            return <Hanoi
+                                state={state.hanoi}
+                                dispatch={childDispatcherFactory(dispatch, state, "hanoi")} />;
                         }} />
                     </div>
                 </BrowserRouter>
