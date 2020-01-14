@@ -13,7 +13,7 @@ import { useDisplay } from "../../../common/Styles/Styles";
 export interface IHanoiSettingsState {
     series: number;
     delay: number;
-    now: keyof ITowers;
+    fromKey: keyof ITowers;
     goto: keyof ITowers;
 }
 interface HanoiSettingsProps extends IPropsBase<IHanoiSettingsState>, IDispatchable<IHanoiSettingsState> {
@@ -70,7 +70,7 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
             },
             towers: new TowersState({
                 ...defaultTowers,
-                [props.state.now]: List(new Array(newClass).fill(0).map((_, idx) => {
+                [props.state.fromKey]: List(new Array(newClass).fill(0).map((_, idx) => {
                     return idx + 1;
                 }))
             })
@@ -89,12 +89,12 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
             </Select> (手数 : {(2 ** props.state.series) - 1}手)
         </div>
         <div className={paddingStyles.bottom5}>
-            {"現在地: " + props.state.now}
+            {"現在地: " + props.state.fromKey}
         </div>
         <div className={paddingStyles.bottom5}>
             移動先 : <Select classes={selectStyles} value={props.state.goto} onChange={handleChildSelectChangeFactory(props.state, "goto")} variant={"outlined"}>
                 {HanoiKeys.filter((key: keyof ITowers) => {
-                    return key !== props.state.now;
+                    return key !== props.state.fromKey;
                 }).map((key: keyof ITowers) => {
                     return <MenuItem key={key} value={key} >{key}</MenuItem>;
                 })}

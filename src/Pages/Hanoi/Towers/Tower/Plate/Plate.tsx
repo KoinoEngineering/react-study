@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import { Transition } from "react-transition-group";
-import { DELAY } from "../../../Hanoi";
 import { TransitionStatus } from "react-transition-group/Transition";
 
 interface IPlateProps {
     max: number;
     size: number;
+    timeout: number;
 }
 
 const createStyle = (rate: number, timeout: number): CSSProperties => {
@@ -38,7 +38,8 @@ const transitionStyle = (rate: number): TransitionStyle => {
 const Plate: React.FC<IPlateProps> = (props: IPlateProps) => {
     const {
         max,
-        size
+        size,
+        timeout,
     } = props;
     const rate = size / max;
 
@@ -53,11 +54,11 @@ const Plate: React.FC<IPlateProps> = (props: IPlateProps) => {
         enter={false}
         exit={false}
         in={inState}
-        timeout={DELAY}
+        timeout={timeout}
     >
         {(state) => {
             return <div style={{
-                ...createStyle(rate, DELAY),
+                ...createStyle(rate, timeout),
                 ...transitionStyle(rate)[state]
             }}>{size || "　"}</div>;
         }}

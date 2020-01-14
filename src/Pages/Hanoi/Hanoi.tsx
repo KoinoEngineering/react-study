@@ -23,8 +23,8 @@ export const initHanoiState = (): IHanoiState => {
         progress: "finished",
         settings: {
             delay: 300,
+            fromKey: "a",
             goto: "c",
-            now: "a",
             series: 3,
         },
         tasks: [],
@@ -70,10 +70,10 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
                         progress: "finished",
                         settings: {
                             ...state.settings,
+                            fromKey: state.settings.goto,
                             goto: keys.filter((key) => {
                                 return key !== state.settings.goto;
                             })[0],
-                            now: state.settings.goto,
                         }
                     });
                 }
@@ -92,7 +92,7 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
         <div style={{ paddingBottom: 5, paddingTop: 5 }}>
             <button disabled={progress !== "finished"} onClick={() => {
                 const tmp: keyof ITowers | undefined = keys.find((value) => {
-                    return value !== props.state.settings.now && value !== props.state.settings.goto;
+                    return value !== props.state.settings.fromKey && value !== props.state.settings.goto;
                 });
 
                 if (!tmp) {
@@ -110,7 +110,7 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
                         progress: "processing",
                         tasks: hanoiEntry(
                             props.state.settings.series,
-                            props.state.settings.now,
+                            props.state.settings.fromKey,
                             props.state.settings.goto,
                             tmp
                         )
