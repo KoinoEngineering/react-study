@@ -22,10 +22,10 @@ export const initHanoiState = (): IHanoiState => {
     return {
         progress: "finished",
         settings: {
-            class: 3,
             delay: 300,
             goto: "c",
             now: "a",
+            series: 3,
         },
         tasks: [],
         towers: new TowersState({
@@ -39,7 +39,6 @@ type IHanoiProps = IPropsBase<IHanoiState> & IDispatchable<IHanoiState>;
 
 const keys: (keyof ITowers)[] = ["a", "b", "c"];
 type IHanoiTasks = ([keyof ITowers, keyof ITowers])[];
-export const DELAY = 1000;
 const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
 
     const dispatchSettings = childDispatcherFactory(props.dispatch, props.state, "settings");
@@ -50,6 +49,9 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
             progress,
             tasks,
             towers,
+            settings: {
+                delay
+            }
         }
     } = props;
     useEffect(() => {
@@ -76,8 +78,8 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
                     });
                 }
             }
-        }, DELAY);
-    }, [dispatch, state, progress, tasks, towers]);
+        }, delay);
+    }, [delay, dispatch, state, progress, tasks, towers]);
     return <div>
         <div>
             <HanoiSettings
@@ -107,7 +109,7 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
                         ...state,
                         progress: "processing",
                         tasks: hanoiEntry(
-                            props.state.settings.class,
+                            props.state.settings.series,
                             props.state.settings.now,
                             props.state.settings.goto,
                             tmp
@@ -118,7 +120,12 @@ const Hanoi: React.FC<IHanoiProps> = (props: IHanoiProps) => {
             }}  >{progress === "finished" ? "start" : (progress + "...")}</button>
         </div>
         <div>
-            <Towers state={props.state.towers} dispatch={childDispatcherFactory(props.dispatch, props.state, "towers")} class={props.state.settings.class} />
+            <Towers
+                delay={delay}
+                state={towers}
+                dispatch={childDispatcherFactory(props.dispatch, props.state, "towers")}
+                series={props.state.settings.series}
+            />
         </div>
         <div>{JSON.stringify(tasks)}</div>
     </div>;

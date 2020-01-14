@@ -11,7 +11,7 @@ import { childDispatcherFactory } from "../../../common/Dispatch";
 import { useDisplay } from "../../../common/Styles/Styles";
 
 export interface IHanoiSettingsState {
-    class: number;
+    series: number;
     delay: number;
     now: keyof ITowers;
     goto: keyof ITowers;
@@ -66,7 +66,7 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
             ...props.stateHanoi,
             settings: {
                 ...props.state,
-                class: newClass
+                series: newClass
             },
             towers: new TowersState({
                 ...defaultTowers,
@@ -81,12 +81,12 @@ const HanoiSettings: React.FC<HanoiSettingsProps> = (props: HanoiSettingsProps) 
     return <div  {...props.divProps} className={ClassNames(props.divProps?.className, borderStyles.solidBlack1)}>
         <div><h3>Settings</h3></div>
         <div className={paddingStyles.bottom5}>
-            段数 :  <Select classes={selectStyles} value={props.state.class} onChange={handleClassChange} variant={"outlined"}>
+            段数 :  <Select classes={selectStyles} value={props.state.series} onChange={handleClassChange} variant={"outlined"}>
                 {new Array<number>(20).fill(0).map((_, idx) => {
                     const tmp = idx + 1;
                     return <MenuItem key={"class_" + tmp} value={tmp}>{tmp}</MenuItem>;
                 })}
-            </Select> (手数 : {(2 ** props.state.class) - 1}手)
+            </Select> (手数 : {(2 ** props.state.series) - 1}手)
         </div>
         <div className={paddingStyles.bottom5}>
             {"現在地: " + props.state.now}

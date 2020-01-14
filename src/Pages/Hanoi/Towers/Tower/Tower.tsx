@@ -7,27 +7,29 @@ import { ITowers } from "../Towers";
 import Plate from "./Plate/Plate";
 
 interface ITowerProps {
-    tower: List<number>;
-    class: number;
+    series: number;
+    delay: number
     name: keyof ITowers;
-}
-
-interface PlateStyleProps {
-    rate: number,
-    timeout: number
+    tower: List<number>;
 }
 
 const Tower: React.FC<ITowerProps> = (props: ITowerProps) => {
+    const {
+        series,
+        delay,
+        name,
+        tower
+    } = props;
     const displayStyles = useDisplay();
     const widthStyles = useWidth();
     return <div className={ClassNames(displayStyles.inlineBlock, widthStyles.p30)}>
         <TransitionGroup>
             {
-                List(new Array<number>(props.class - props.tower.size)
+                List(new Array<number>(series - tower.size)
                     .fill(0))
-                    .concat(props.tower)
+                    .concat(tower)
                     .map((value, idx) => {
-                        return <Plate key={props.name + "_" + idx} size={value} max={props.class} />;
+                        return <Plate key={name + "_" + idx} size={value} max={series} timeout={delay} />;
                     })}
         </TransitionGroup>
     </div>;

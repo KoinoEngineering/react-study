@@ -35,10 +35,21 @@ export class TowersState extends Record<ITowers>({
 }
 
 interface ITowersProps extends IPropsBase<TowersState>, IDispatchable<TowersState> {
-    class: number;
+    series: number;
+    delay: number
 }
 
 const Towers: React.FC<ITowersProps> = (props: ITowersProps) => {
+
+    const {
+        delay,
+        series,
+        state: {
+            a,
+            b,
+            c
+        }
+    } = props;
 
     const borderStyle = makeStyles({
         solidBalck1: {
@@ -47,9 +58,9 @@ const Towers: React.FC<ITowersProps> = (props: ITowersProps) => {
     })();
 
     return <div className={borderStyle.solidBalck1}>
-        <Tower tower={props.state.a} class={props.class} name={"a"} />
-        <Tower tower={props.state.b} class={props.class} name={"b"} />
-        <Tower tower={props.state.c} class={props.class} name={"c"} />
+        <Tower tower={a} series={series} name={"a"} delay={delay} />
+        <Tower tower={b} series={series} name={"b"} delay={delay} />
+        <Tower tower={c} series={series} name={"c"} delay={delay} />
     </div>;
 };
 
