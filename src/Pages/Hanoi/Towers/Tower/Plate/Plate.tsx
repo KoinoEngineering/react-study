@@ -10,7 +10,6 @@ interface IPlateProps {
 }
 
 const createStyle = (rate: number, timeout: number): CSSProperties => {
-    console.log(rate);
     return {
         backgroundColor: "hsl(" + rate * 360 + ",75%,75%)",
         border: "solid black 1px",
